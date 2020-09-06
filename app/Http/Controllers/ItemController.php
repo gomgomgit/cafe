@@ -80,7 +80,7 @@ class ItemController extends Controller
         $variants = Variant::all();
         $sizes = Size::all();
         $ingredients = Ingredient::all();
-        return view($this->view . 'create', compact('categories', 'variants', 'sizes', 'ingredients'));
+        return view($this->view . 'create', compact('categories', 'variants', 'ingredients', 'sizes'));
     }
     public function createDetail(Request $request)
     {
