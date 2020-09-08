@@ -11,6 +11,8 @@ class IngredientController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth');
+
         $this->model = new Ingredient();
         $this->view = 'admin.ingredients.';
         $this->redirect = '/admin/ingredients';

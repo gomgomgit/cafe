@@ -9,6 +9,8 @@ class OrderController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth');
+
         $this->model = new Order();
         $this->view = 'orders.';
         $this->redirect = '/orders';

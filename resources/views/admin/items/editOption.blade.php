@@ -1,3 +1,13 @@
+<?php
+
+$selectedSize = $details->pluck('size_id')->toArray();
+
+$selectedVariant = $details->pluck('variant_id')->toArray();
+
+$selectedIngredient = $details->first()->ingredients()->pluck('ingredient_id')->toArray();
+
+?>
+
 @extends('admin.layouts.app')
 
 @section('head-script')
@@ -32,11 +42,11 @@
       <div class="col-sm-12">
           <div class="card">
               <div class="card-header">
-                  <h5>Create Item</h5>
+                  <h5>Edit {{ $data->name }} Option</h5>
                   <hr>
                   <div class="row">
                       <div class="col-lg-12">
-                          <form action="{{ route('admin.items.createDetail') }}" method="get">
+                          <form action="{{ route('admin.items.editDetailOption', $data->id) }}" method="post">
                               @csrf
                               @if ($errors->any())
                                   <div class="alert alert-danger">
@@ -47,9 +57,15 @@
                                       </ul>
                                   </div>
                               @endif
-                              <div class="form-group">
+
+                              <div class="mb-3">
+                                <p class="text-dark font-weight-bold h4 d-inline-block">{{ $data->name }} </p>
+                                <p class="text-dark h6 d-inline-block">- {{ $data->category->name }}</p>
+                              </div>
+
+                              {{-- <div class="form-group">
                                   <label for="data-name">Name</label>
-                                  <input type="text" class="form-control" id="data-name" name="name" placeholder="Item Name" value="{{ old('name') }}">
+                                  <input type="text" class="form-control" id="data-name" name="name" placeholder="Item Name" value="{{ old('name', $data->name) }}">
                               </div>
 
 
@@ -60,12 +76,14 @@
                                   @foreach($categories as $category)
                                     <option
                                       value="{{ $category->id }}"
-                                      {{ old('category_id') == $category->id ? 'selected' : '' }}
+                                      {{ old('category_id', $data->category_id == $category->id ? 'selected' : '' ) }}
                                       >{{ $category->name }}</option>
                                   @endforeach
                                 </select>
 
-                              </div>
+                              </div> --}}
+                              <input type="hidden" name="name" value="{{ $data->name }}">
+                              <input type="hidden" name="category_id" value="{{ $data->category_id }}">
 
 
                               <div class="form-group">
@@ -77,7 +95,10 @@
                                       @foreach($variants as $key => $variant)
                                         <li><input type="checkbox" name="variants[]" id="variant{{ $key }}"
                                         value="{{ $variant->id }}"
-                                        @if(is_array(old('variants')) && in_array($variant->id, old('variants'))) checked @endif
+                                        {{-- @if(is_array(old('variants')) && in_array($variant->id, old('variants'))) checked @endif --}}
+                                        @if(in_array($variant->id, $selectedVariant))
+                                        checked
+                                        @endif
                                         ><label for="variant{{ $key }}">{{ $variant->name }}</label></li>
                                       @endforeach
 
@@ -97,7 +118,10 @@
                                       @foreach($sizes as $key => $size)
                                         <li><input type="checkbox" name="sizes[]" id="size{{ $key }}"
                                         value="{{ $size->id }}"
-                                        @if(is_array(old('sizes')) && in_array($variant->id, old('sizes'))) checked @endif
+                                        {{-- @if(is_array(old('sizes')) && in_array($variant->id, old('sizes'))) checked @endif --}}
+                                          @if(in_array($size->id, $selectedSize))
+                                          checked
+                                          @endif
                                         >
                                         <label for="size{{ $key }}">{{ $size->name }}</label></li>
                                       @endforeach
@@ -118,7 +142,10 @@
                                       @foreach($ingredients as $key => $ingredient)
                                         <li><input type="checkbox" name="ingredients[]" id="ingredient{{ $key }}"
                                         value="{{ $ingredient->id }}"
-                                        @if(is_array(old('ingredients')) && in_array($variant->id, old('ingredients'))) checked @endif
+                                        {{-- @if(is_array(old('ingredients')) && in_array($variant->id, old('ingredients'))) checked @endif --}}
+                                        @if(in_array($ingredient->id, $selectedIngredient))
+                                        checked
+                                        @endif
                                         >
                                         <label for="ingredient{{ $key }}">{{ $ingredient->name }}</label></li>
                                       @endforeach
@@ -130,7 +157,7 @@
                                 </div>
                               </div>
 
-                              <button class="btn btn-primary">Next</button>
+                              <button class="btn btn-primary">Edit Option Item</button>
                           </form>
                       </div>
                   </div>

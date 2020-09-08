@@ -7,7 +7,7 @@ $menus = [
     ],
     [
         'title' => 'Item',
-        'icon' => 'home',
+        'icon' => 'clipboard',
         'route' => 'admin.items',
         'model' => App\Model\Item::class,
         'subMenu' => [
@@ -23,7 +23,7 @@ $menus = [
     ],
     [
         'title' => 'Category',
-        'icon' => 'home',
+        'icon' => 'list',
         'route' => 'admin.categories',
         'model' => App\Model\Category::class,
         'subMenu' => [
@@ -39,7 +39,7 @@ $menus = [
     ],
     [
         'title' => 'Variant',
-        'icon' => 'home',
+        'icon' => 'grid',
         'route' => 'admin.variants',
         'model' => App\Model\Variant::class,
         'subMenu' => [
@@ -55,7 +55,7 @@ $menus = [
     ],
     [
         'title' => 'Size',
-        'icon' => 'home',
+        'icon' => 'package',
         'route' => 'admin.sizes',
         'model' => App\Model\Size::class,
         'subMenu' => [
@@ -87,7 +87,7 @@ $menus = [
     ],
     [
         'title' => 'Order',
-        'icon' => 'home',
+        'icon' => 'edit',
         'route' => 'admin.orders',
         'model' => App\Model\Order::class,
         'subMenu' => [
@@ -100,6 +100,12 @@ $menus = [
                 'route' => 'admin.orders.create',
             ],
         ],
+    ],
+    [
+        'title' => 'User',
+        'icon' => 'user',
+        'route' => 'admin.users.index',
+        'model' => App\Model\User::class,
     ],
 ]
 ?>

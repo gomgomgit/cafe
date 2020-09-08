@@ -32,12 +32,13 @@
       <div class="col-sm-12">
           <div class="card">
               <div class="card-header">
-                  <h5>Create Item</h5>
+                  <h5>Edit {{ $data->name }}</h5>
                   <hr>
                   <div class="row">
                       <div class="col-lg-12">
-                          <form action="{{ route('admin.items.createDetail') }}" method="get">
+                          <form action="{{ route('admin.items.updateItem', $data->id) }}" method="post">
                               @csrf
+                              @method('PUT')
                               @if ($errors->any())
                                   <div class="alert alert-danger">
                                       <ul>
@@ -49,7 +50,7 @@
                               @endif
                               <div class="form-group">
                                   <label for="data-name">Name</label>
-                                  <input type="text" class="form-control" id="data-name" name="name" placeholder="Item Name" value="{{ old('name') }}">
+                                  <input type="text" class="form-control" id="data-name" name="name" placeholder="Item Name" value="{{ old('name', $data->name) }}">
                               </div>
 
 
@@ -60,7 +61,7 @@
                                   @foreach($categories as $category)
                                     <option
                                       value="{{ $category->id }}"
-                                      {{ old('category_id') == $category->id ? 'selected' : '' }}
+                                      {{ old('category_id', $data->category_id == $category->id ? 'selected' : '' ) }}
                                       >{{ $category->name }}</option>
                                   @endforeach
                                 </select>
@@ -68,7 +69,7 @@
                               </div>
 
 
-                              <div class="form-group">
+                              {{-- <div class="form-group">
                                 <div class="custom-body">
                                   <div class="custom-container d-flex">
                                     <p>Variant</p>
@@ -128,9 +129,21 @@
                                   </div>
 
                                 </div>
+                              </div> --}}
+
+
+
+                              <div class="form-group">
+                                  <label for="inputImage" class="text-dark font-weight-bold mb-2">Image</label>
+                                  <input class="d-block" id="inputImage" type="file" placeholder="Title" name="image_file" accept="image/*">
                               </div>
 
-                              <button class="btn btn-primary">Next</button>
+                              <div class="form-group">
+                                  <label for="description" class="text-dark font-weight-bold mb-2">Description</label>
+                                  <textarea class="form-control" id="description" rows="3" name="description">{{ $data->description }}</textarea>
+                              </div>
+
+                              <button class="btn btn-primary">Edit Base Item</button>
                           </form>
                       </div>
                   </div>

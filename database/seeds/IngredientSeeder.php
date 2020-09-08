@@ -25,6 +25,11 @@ class IngredientSeeder extends Seeder
         ]);
 
         Ingredient::create([
+            'name' => 'Cream',
+            'stock' => '3000',
+        ]);
+
+        Ingredient::create([
             'name' => 'Ice',
             'stock' => '7500',
         ]);

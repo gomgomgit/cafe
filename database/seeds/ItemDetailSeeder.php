@@ -20,13 +20,14 @@ class ItemDetailSeeder extends Seeder
 
             for ($j = 2; $j <= 3; $j++) {
 
-                ItemDetail::create([
+                $detailId = ItemDetail::create([
                     'item_id' => $i,
                     'variant_id' => $j,
                     'size_id' => 1,
                     'price' => 25000,
                 ]);
 
+                $detailId->ingredients()->sync([1 => ["amount_ingredient" => 7], 2 => ["amount_ingredient" => 120]]);
             }
 
         }

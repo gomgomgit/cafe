@@ -30,12 +30,12 @@
 
 @endsection
 
-@section('title', 'Item')
+@section('title', 'User')
 @section('breadcrumb')
 	<ul class="breadcrumb">
 	    <li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a></li>
-	    <li class="breadcrumb-item"><a href="#!">Item</a></li>
-	    <li class="breadcrumb-item"><a href="javascript:">List Item</a></li>
+	    <li class="breadcrumb-item"><a href="#!">User</a></li>
+	    <li class="breadcrumb-item"><a href="javascript:">List User</a></li>
 	</ul>
 @endsection
 
@@ -57,9 +57,7 @@
                               <tr>
                                   <th>No</th>
                                   <th>Name</th>
-                                  <th>Category</th>
-                                  {{-- <th>Variants</th>
-                                  <th>Size</th> --}}
+                                  <th>Phone</th>
                                   <th>Action</th>
                               </tr>
                           </thead>
@@ -84,11 +82,11 @@
 
 
     {{-- Yajra Datatable --}}
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" /> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
 
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
 
-    {{-- <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 
@@ -105,13 +103,11 @@
 			var table = $('#data-table').DataTable({
 				processing: true,
 				serverSide: true,
-				ajax: "{{ route('admin.items.index') }}",
+				ajax: "{{ route('admin.users.index') }}",
 				columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false},
 					{data: 'name', name: 'name'},
-          {data: 'category_id', name: 'category_id'},
-          // {data: 'variants', name: 'variants'},
-          // {data: 'size', name: 'size'},
+          {data: 'phone', name: 'phone'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 				],
 			});

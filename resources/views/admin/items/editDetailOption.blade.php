@@ -1,10 +1,25 @@
 <?php
-$variants = DB::table('variants')->whereIn('id', $data->variants)->get();
-$sizes = DB::table('sizes')->whereIn('id', $data->sizes)->get();
-$ingredients = DB::table('ingredients')->whereIn('id', $data->ingredients)->get();
+$variants = $dbVariant->whereIn('id', $data->variants)->get();
+$sizes = $dbSize->whereIn('id', $data->sizes)->get();
+$ingredients = $dbIngredient->whereIn('id', $data->ingredients)->get();
 $ingredientSelected = count($ingredients);
 $ingredientCount = 0;
 $detailCount = 0;
+
+use App\Model\ItemDetail;
+
+function searchDetail($variant, $size)
+{
+    return ItemDetail::where([['variant_id', $variant], ['size_id', $size]])->first();
+}
+function ingredientDetail($detail, $ingredient)
+{
+    if ($detail) {
+        $data = $detail->ingredients()->pluck('amount_ingredient', 'ingredients.id')->toArray();
+        return $data;
+    }
+}
+
 ?>
 
 @extends('admin.layouts.app')
@@ -45,8 +60,9 @@ $detailCount = 0;
                   <hr>
                   <div class="row">
                       <div class="col-lg-12">
-                          <form action="{{ route('admin.items.store') }}" method="post">
+                          <form action="{{ route('admin.items.updateDetailOption', $data->id) }}" method="post">
                               @csrf
+                              @method('PUT')
                               @if ($errors->any())
                                   <div class="alert alert-danger">
                                       <ul>
@@ -66,7 +82,11 @@ $detailCount = 0;
                               @foreach($variants as $key => $variant)
 
                                 @foreach($sizes as $key => $size)
-                                  @php $detailCount++ @endphp
+                                  @php
+                                  $detailCount++;
+                                  // dd(searchPrice($variant->id, $size->id));
+                                  $detailData = searchDetail($variant->id, $size->id);
+                                  @endphp
                                   <p class="font-weight-bold h6 text-dark">{{$detailCount . '. Variant: '. $variant->name . ', Size: '. $size->name}}</p>
 
                                   <input type="hidden" re="test" name="variant[]" value="{{ $variant->id }}">
@@ -74,17 +94,24 @@ $detailCount = 0;
 
                                   <div class="form-group">
                                       <label for="" class="font-weight-bold text-dark">Price</label>
-                                      <input type="number" class="form-control" id="" name="price[]" placeholder="Price">
+                                      <input type="number" class="form-control" id="" name="price[]" placeholder="Price" value="{{ $detailData ? $detailData->price : '' }}">
                                   </div>
 
                                   <p class="text-dark font-weight-bold mb-2">Ingredients:</p>
                                   <div class="row">
                                     @foreach($ingredients as $keyIngredient => $ingredient)
-                                    @php $ingredientCount++ @endphp
+                                    @php
+                                      $ingredientCount++;
+
+                                      $ingredientDetail = ingredientDetail($detailData, $ingredient);
+
+                                    @endphp
                                       <div class="form-group col-2">
                                           <p>{{ $ingredient->name }}</p>
                                           <input type="hidden" re="test" name="ingredientId[]" value="{{ $ingredient->id }}">
-                                          <input type="number" class="form-control" id="data-qty-ingredient{{ $keyIngredient }}" name="ingredientQty[]" value="" placeholder="Qty">
+                                          <input type="number" class="form-control" id="data-qty-ingredient{{ $keyIngredient }}" name="ingredientQty[]"
+                                            value="{{ $ingredientDetail[$ingredient->id] ? $ingredientDetail[$ingredient->id] : '' }}"
+                                            placeholder="Qty">
                                       </div>
                                     @endforeach
                                   </div>
@@ -97,17 +124,17 @@ $detailCount = 0;
                               <input type="hidden" re="test" name="ingredientSelected" value="{{ $ingredientSelected }}">
                               <input type="hidden" re="test" name="ingredientCount" value="{{ $ingredientCount }}">
 
-                              <div class="form-group">
+                              {{-- <div class="form-group">
                                   <label for="inputImage" class="text-dark font-weight-bold mb-2">Image</label>
                                   <input class="d-block" id="inputImage" type="file" placeholder="Title" name="image_file" accept="image/*">
                               </div>
 
                               <div class="form-group">
                                   <label for="description" class="text-dark font-weight-bold mb-2">Description</label>
-                                  <textarea class="form-control" id="description" rows="3"></textarea>
-                              </div>
+                                  <textarea class="form-control" id="description" rows="3">{{ $item->description }}</textarea>
+                              </div> --}}
 
-                              <button type="submit" class="btn btn-primary">Create</button>
+                              <button type="submit" class="btn btn-primary">Edit</button>
                           </form>
                       </div>
                   </div>

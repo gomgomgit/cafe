@@ -11,6 +11,8 @@ class VariantController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth');
+
         $this->model = new Variant();
         $this->view = 'admin.variants.';
         $this->redirect = '/admin/variants';
@@ -130,7 +132,9 @@ class VariantController extends Controller
     {
         $model = $this->model->find($id);
 
-        ItemDetail::where('variant_id', '$id')->update([
+        // dd(ItemDetail::where('variant_id', $id)->get());
+
+        ItemDetail::where('variant_id', $id)->update([
             'variant_id' => 1,
         ]);
 

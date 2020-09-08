@@ -98,10 +98,14 @@
                         <div class="dropdown-menu dropdown-menu-right profile-notification">
                             <div class="pro-head">
                                 <img src="{{ asset('dattalite/assets/images/user/avatar-1.jpg') }}" class="img-radius" alt="User-Profile-Image">
-                                <span>John Doe</span>
-                                <a href="auth-signin.html" class="dud-logout" title="Logout">
-                                    <i class="feather icon-log-out"></i>
-                                </a>
+                                <span>{{ auth()->user()->name }}</span>
+                                <form action="{{ route('admin.logout') }}" method="post">
+                                    @csrf
+                                    <button class="dud-logout pointer" style="border: none; background: #04A9F5; cursor: pointer;">
+                                        <i class="feather icon-log-out"></i>
+                                    </button>
+
+                                </form>
                             </div>
                             <ul class="pro-body">
                                 <li><a href="javascript:" class="dropdown-item"><i class="feather icon-settings"></i> Settings</a></li>

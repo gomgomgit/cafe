@@ -19,4 +19,15 @@ class ItemDetail extends Model
     {
         return $this->belongsTo('App\Model\Size');
     }
+
+    public function ingredients()
+    {
+        return $this->belongsToMany('App\Model\Ingredient')->withPivot('amount_ingredient');
+    }
+
+    public function ingredient()
+    {
+        return $this->hasMany('App\Model\Ingredient');
+    }
+
 }

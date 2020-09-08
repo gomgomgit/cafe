@@ -19,7 +19,22 @@ Route::get('/', function () {
 
 Route::prefix('/admin')->name('admin.')->group(function () {
 
+    Route::get('/login', 'AuthController@login')->name('login');
+    Route::post('/login-process', 'AuthController@loginProcess')->name('loginProcess');
+    Route::get('/register', 'AuthController@register')->name('register');
+    Route::post('/register-process', 'AuthController@registerProcess')->name('registerProcess');
+    Route::post('/logout', 'AuthController@logout')->name('logout');
+
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+
+    Route::prefix('/users')->name('users.')->group(function () {
+        Route::get('/', 'UserController@index')->name('index');
+        Route::get('/show/{id}', 'UserController@show')->name('show');
+        Route::get('/edit/{id}', 'UserController@edit')->name('edit');
+        Route::put('/update/{id}', 'UserController@update')->name('update');
+        Route::delete('/delete/{id}', 'UserController@delete')->name('delete');
+
+    });
 
     Route::prefix('/categories')->name('categories.')->group(function () {
         Route::get('/', 'CategoryController@index')->name('index');
@@ -35,9 +50,17 @@ Route::prefix('/admin')->name('admin.')->group(function () {
     Route::prefix('/items')->name('items.')->group(function () {
         Route::get('/', 'ItemController@index')->name('index');
         Route::get('/create', 'ItemController@create')->name('create');
-        Route::post('/createDetail', 'ItemController@createDetail')->name('createDetail');
+        Route::get('/createDetail', 'ItemController@createDetail')->name('createDetail');
         Route::post('/store', 'ItemController@store')->name('store');
-        Route::get('/edit/{id}', 'ItemController@edit')->name('edit');
+        Route::get('/detail/{id}', 'ItemController@detail')->name('detail');
+        Route::get('/edit-item/{id}', 'ItemController@editItem')->name('editItem');
+        Route::get('/edit-detail/{id}', 'ItemController@editDetail')->name('editDetail');
+        Route::get('/edit-option/{id}', 'ItemController@editOption')->name('editOption');
+        Route::post('/edit-detail-option/{id}', 'ItemController@editDetailOption')->name('editDetailOption');
+        Route::put('/update-item/{id}', 'ItemController@updateItem')->name('updateItem');
+        Route::put('/update-detail/{id}', 'ItemController@updateDetail')->name('updateDetail');
+        Route::put('/update-option/{id}', 'ItemController@updateOption')->name('updateOption');
+        Route::put('/update-detail-option/{id}', 'ItemController@updateDetailOption')->name('updateDetailOption');
         Route::put('/update/{id}', 'ItemController@update')->name('update');
         Route::delete('/delete/{id}', 'ItemController@delete')->name('delete');
     });
