@@ -1,5 +1,5 @@
 <?php
-dd($data->ingredients()->pluck('name'));
+{{-- dd($data->ingredients()->pluck('name')); --}}
 ?>
 
 @extends('admin.layouts.app')

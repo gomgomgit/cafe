@@ -4,6 +4,7 @@ $menus = [
         'title' => 'Dashboard',
         'icon' => 'home',
         'route' => 'admin.dashboard',
+        'model' => App\Model\Item::class,
     ],
     [
         'title' => 'Item',
@@ -128,6 +129,8 @@ $menus = [
 
                 @foreach($menus as $index => $menu)
 
+                @can('viewAny', $menu['model'])
+
                   @if(isset($menu['subMenu']))
                     <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu {{ Request::routeIs("$menu[route]*") ? 'active pcoded-trigger' : '' }}">
                         <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-{{ $menu['icon'] }}"></i></span><span class="pcoded-mtext">{{ $menu['title'] }}</span></a>
@@ -145,6 +148,8 @@ $menus = [
                     </li>
 
                   @endif
+
+                @endcan
 
                 @endforeach
             </ul>

@@ -8,9 +8,9 @@ $detailCount = 0;
 
 use App\Model\ItemDetail;
 
-function searchDetail($variant, $size)
+function searchDetail($variant, $size, $item)
 {
-    return ItemDetail::where([['variant_id', $variant], ['size_id', $size]])->first();
+    return ItemDetail::where([['variant_id', $variant], ['size_id', $size], ['item_id', $item]])->first();
 }
 function ingredientDetail($detail, $ingredient)
 {
@@ -18,6 +18,13 @@ function ingredientDetail($detail, $ingredient)
         $data = $detail->ingredients()->pluck('amount_ingredient', 'ingredients.id')->toArray();
         return $data;
     }
+}
+
+function qtyIngredient($detail, $id)
+{
+    if (empty($detail[$id])) {
+        return 0;
+    } else {return $detail[$id];}
 }
 
 ?>
@@ -85,7 +92,7 @@ function ingredientDetail($detail, $ingredient)
                                   @php
                                   $detailCount++;
                                   // dd(searchPrice($variant->id, $size->id));
-                                  $detailData = searchDetail($variant->id, $size->id);
+                                  $detailData = searchDetail($variant->id, $size->id, $data->id);
                                   @endphp
                                   <p class="font-weight-bold h6 text-dark">{{$detailCount . '. Variant: '. $variant->name . ', Size: '. $size->name}}</p>
 
@@ -110,7 +117,7 @@ function ingredientDetail($detail, $ingredient)
                                           <p>{{ $ingredient->name }}</p>
                                           <input type="hidden" re="test" name="ingredientId[]" value="{{ $ingredient->id }}">
                                           <input type="number" class="form-control" id="data-qty-ingredient{{ $keyIngredient }}" name="ingredientQty[]"
-                                            value="{{ $ingredientDetail[$ingredient->id] ? $ingredientDetail[$ingredient->id] : '' }}"
+                                            value="{{ qtyIngredient($ingredientDetail, $ingredient->id) }}"
                                             placeholder="Qty">
                                       </div>
                                     @endforeach

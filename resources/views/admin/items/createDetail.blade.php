@@ -45,7 +45,7 @@ $detailCount = 0;
                   <hr>
                   <div class="row">
                       <div class="col-lg-12">
-                          <form action="{{ route('admin.items.store') }}" method="post">
+                          <form action="{{ route('admin.items.store') }}" method="post" enctype="multipart/form-data">
                               @csrf
                               @if ($errors->any())
                                   <div class="alert alert-danger">

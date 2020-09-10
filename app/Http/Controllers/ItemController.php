@@ -10,6 +10,7 @@ use App\Model\Size;
 use App\Model\Variant;
 use DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
@@ -24,6 +25,7 @@ class ItemController extends Controller
     }
     public function index(Request $request)
     {
+        $this->authorize('viewAny', $this->model);
 
         if ($request->ajax()) {
             $data = $this->model->all();
@@ -66,6 +68,7 @@ class ItemController extends Controller
     }
     public function create()
     {
+        $this->authorize('create', $this->model);
 
         $categories = Category::all();
         $variants = Variant::all();
@@ -75,6 +78,7 @@ class ItemController extends Controller
     }
     public function createDetail(Request $request)
     {
+        $this->authorize('create', $this->model);
         $request->validate([
             'name' => 'required|unique:' . $this->name . ',name',
             'category_id' => 'required',
@@ -87,6 +91,7 @@ class ItemController extends Controller
     }
     public function store(Request $request)
     {
+        $this->authorize('create', $this->model);
         $request->validate([
             'name' => 'required|unique:' . $this->name . ',name',
             'category_id' => 'required',
@@ -161,6 +166,7 @@ class ItemController extends Controller
     }
     public function detail($id)
     {
+        $this->authorize('view', $this->model);
         $data = $this->model->find($id);
         $details = ItemDetail::where('item_id', $id)->get();
         return view($this->view . 'detail', compact('data', 'details', 'ingredients'));
@@ -168,6 +174,8 @@ class ItemController extends Controller
     public function editItem($id)
     {
         $data = $this->model->find($id);
+        $this->authorize('update', $data);
+
         $details = ItemDetail::where('item_id', $id)->get();
         $categories = Category::all();
         return view('admin.items.editItem', compact('data', 'details', 'categories'));
@@ -175,11 +183,13 @@ class ItemController extends Controller
     public function editDetail($id)
     {
         $data = ItemDetail::find($id);
+        $this->authorize('update', $data);
         return view('admin.items.editDetail', compact('data'));
     }
     public function editOption($id)
     {
         $data = $this->model->find($id);
+        $this->authorize('update', $data);
         $details = ItemDetail::where('item_id', $data->id)->get();
         // dd($details->first()->ingredients());
         $categories = Category::all();
@@ -191,16 +201,19 @@ class ItemController extends Controller
     }
     public function editDetailOption(Request $request, $id)
     {
+
+        $data = $request;
+
+        $item = $this->model->find($id);
+
+        $this->authorize('update', $item);
+
         $request->validate([
             'name' => 'required|unique:' . $this->name . ',name,' . $id,
             'category_id' => 'required',
             'variants' => 'required',
             'sizes' => 'required',
         ]);
-
-        $data = $request;
-
-        $item = $this->model->find($id);
         $dbItemDetail = new ItemDetail();
         $dbVariant = new Variant();
         $dbSize = new Size();
@@ -210,6 +223,8 @@ class ItemController extends Controller
     public function updateItem(Request $request, $id)
     {
         $data = $this->model->find($id);
+        $this->authorize('update', $data);
+
         $details = ItemDetail::where('item_id', $id)->get();
 
         $data->name = $request->name;
@@ -224,6 +239,7 @@ class ItemController extends Controller
     public function updateDetail(Request $request, $id)
     {
         $data = ItemDetail::find($id);
+        $this->authorize('update', $data);
 
         $request->validate([
             'price' => 'required',
@@ -238,6 +254,10 @@ class ItemController extends Controller
     }
     public function updateDetailOption(Request $request, $id)
     {
+        $model = Item::find($id);
+
+        $this->authorize('update', $model);
+
         $request->validate([
             'name' => 'required|unique:' . $this->name . ',name,' . $id,
             'category_id' => 'required',
@@ -248,15 +268,15 @@ class ItemController extends Controller
             'ingredientQty' => 'required',
         ]);
 
-        $model = Item::find($id);
-
         $item = $model->update($request->all());
 
         $ingredients = 0;
 
         $itemDetails = ItemDetail::where('item_id', $id)->get();
+        // $itemDetails->delete();
         foreach ($itemDetails as $key => $itemDetail) {
-            // $itemDetail->ingredients()->detach();
+            //     $itemDetail->ingredients()->detach();
+            DB::table('ingredient_item_detail')->where('item_detail_id', $itemDetail->id)->delete();
             $itemDetail->delete();
         }
 
@@ -296,7 +316,9 @@ class ItemController extends Controller
     }
     public function delete($id)
     {
-        $this->model->find($id)->delete();
+        $model = $this->model->find($id);
+        $this->authorize('update', $model);
+        $model->delete();
         ItemDetail::where('item_id', '$id')->delete();
         return redirect($this->redirect);
     }

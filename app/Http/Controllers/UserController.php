@@ -20,6 +20,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('viewAny', $this->model);
 
         if ($request->ajax()) {
             $data = $this->model->all();
@@ -45,24 +46,29 @@ class UserController extends Controller
 
     public function show($id)
     {
-        //
+        $data = $this->model->find($id);
+        $this->authorize('view', $data);
     }
 
     public function edit($id)
     {
         $data = $this->model->find($id);
+        $this->authorize('update', $data);
 
         return view($this->view . "edit", compact('data'));
     }
 
     public function update(Request $request, $id)
     {
+        $data = $this->model->find($id);
+
+        $this->authorize('update', $data);
+
         $this->validate($request, [
             'name' => 'required|unique:' . $this->name . ',name,' . $id,
             'role' => 'required',
         ]);
 
-        $data = $this->model->find($id);
         $data->name = $request->name;
         $data->role = $request->role;
 
@@ -81,6 +87,7 @@ class UserController extends Controller
     public function delete($id)
     {
         $model = $this->model->find($id);
+        $this->authorize('delete', $model);
 
         $model->delete();
         return redirect($this->redirect);

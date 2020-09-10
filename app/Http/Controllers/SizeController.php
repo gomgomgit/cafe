@@ -26,6 +26,7 @@ class SizeController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', $this->model);
 
         if ($request->ajax()) {
             $data = $this->model->all();
@@ -56,6 +57,7 @@ class SizeController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', $this->model);
         return view($this->view . 'create');
     }
 
@@ -67,6 +69,7 @@ class SizeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', $this->model);
         $this->validate($request, [
             'name' => 'required|unique:' . $this->name . ',name,',
         ]);
@@ -98,6 +101,7 @@ class SizeController extends Controller
     public function edit($id)
     {
         $data = $this->model->find($id);
+        $this->authorize('update', $data);
 
         return view($this->view . "edit", compact('data'));
     }
@@ -111,11 +115,13 @@ class SizeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $this->model->find($id);
+        $this->authorize('update', $data);
+
         $this->validate($request, [
             'name' => 'required|unique:' . $this->name . ',name,' . $id,
         ]);
 
-        $data = $this->model->find($id);
         $data->name = $request->name;
         $data->save();
 
@@ -131,6 +137,7 @@ class SizeController extends Controller
     public function delete($id)
     {
         $model = $this->model->find($id);
+        $this->authorize('delete', $model);
 
         ItemDetail::where('size_id', $id)->update([
             'size_id' => 1,

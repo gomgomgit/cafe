@@ -26,6 +26,7 @@ class IngredientController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', $this->model);
 
         if ($request->ajax()) {
             $data = $this->model->all();
@@ -59,6 +60,7 @@ class IngredientController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', $this->model);
         return view($this->view . 'create');
     }
 
@@ -70,6 +72,7 @@ class IngredientController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', $this->model);
         $this->validate($request, [
             'name' => 'required|unique:' . $this->name . ',name',
             'stock' => 'required',
@@ -103,6 +106,7 @@ class IngredientController extends Controller
     public function edit($id)
     {
         $data = $this->model->find($id);
+        $this->authorize('update', $data);
 
         return view($this->view . "edit", compact('data'));
     }
@@ -116,12 +120,14 @@ class IngredientController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $this->model->find($id);
+        $this->authorize('update', $data);
+
         $this->validate($request, [
             'name' => 'required|unique:' . $this->name . ',name,' . $id,
             'stock' => 'required',
         ]);
 
-        $data = $this->model->find($id);
         $data->name = $request->name;
         $data->save();
 
@@ -137,6 +143,7 @@ class IngredientController extends Controller
     public function delete($id)
     {
         $model = $this->model->find($id);
+        $this->authorize('viewAny', $model);
 
         DB::table('ingredient_item_detail')->where('ingredient_id', $id)->update(array(
             'ingredient_id' => 1,

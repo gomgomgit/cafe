@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Category;
+use App\Model\Item;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -14,6 +16,7 @@ class DashboardController extends Controller
 
     public function index()
     {
+        // $this->authorize('view', $this->model);
         $items = Item::all();
         $categories = Category::all();
 

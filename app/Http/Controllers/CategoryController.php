@@ -21,6 +21,7 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('viewAny', $this->model);
 
         if ($request->ajax()) {
             $data = $this->model->all();
@@ -46,11 +47,13 @@ class CategoryController extends Controller
 
     public function create()
     {
+        $this->authorize('create', $this->model);
         return view($this->view . 'create');
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', $this->model);
         $this->validate($request, [
             'name' => 'required|unique:' . $this->name . ',name,',
         ]);
@@ -70,17 +73,21 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $data = $this->model->find($id);
+        $this->authorize('update', $data);
 
         return view($this->view . "edit", compact('data'));
     }
 
     public function update(Request $request, $id)
     {
+        $data = $this->model->find($id);
+
+        $this->authorize('update', $data);
+
         $this->validate($request, [
             'name' => 'required|unique:' . $this->name . ',name,' . $id,
         ]);
 
-        $data = $this->model->find($id);
         $data->name = $request->name;
         $data->save();
 
@@ -90,6 +97,7 @@ class CategoryController extends Controller
     public function delete($id)
     {
         $model = $this->model->find($id);
+        $this->authorize('delete', $model);
 
         Item::where('category_id', '$id')->update([
             'category_id' => 1,
