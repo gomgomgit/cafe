@@ -37,8 +37,8 @@ class IngredientController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
-                    $button = '<a href="' . $this->name . '/edit/' . $data->id . '" class="btn btn-sm btn-primary"><i class="feather icon-edit"></i>Edit</a>';
-                    $button .= '<form class=" d-inline-block" method="post" action="' . $this->name . '/delete/' . $data->id . '">
+                    $button = '<a href="' . $this->redirect . '/edit/' . $data->id . '" class="btn btn-sm btn-primary"><i class="feather icon-edit"></i>Edit</a>';
+                    $button .= '<form class=" d-inline-block" method="post" action="' . $this->redirect . '/delete/' . $data->id . '">
                                     ' . csrf_field() . '
                                     ' . method_field('DELETE') . '
                                     <button class="btn btn-sm btn-danger"><i class="feather icon-trash-2"></i>Delete</button>

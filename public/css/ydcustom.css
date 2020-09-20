@@ -1,0 +1,5 @@
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: none !important;
+    border: none !important;
+  }

@@ -52,7 +52,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        return ($user->role == 'admin' || $user->name == $model->name) && $user->id != 1;
+        return ($user->role == 'admin' || $user->name == $model->name) && $model->id != 1;
     }
 
     /**
@@ -64,7 +64,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        return ($user->role == 'admin' || $user->name == $model->name) && $user->id != 1;
+        return ($user->role == 'admin' || $user->name == $model->name) && $model->id != 1;
     }
 
     /**

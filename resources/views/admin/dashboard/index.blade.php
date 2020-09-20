@@ -1,3 +1,26 @@
+<?php
+$latestUsers = App\Model\User::latest()->take(5)->get();
+$categoryCount = App\Model\Category::count();
+$itemCount = App\Model\Item::count();
+
+$cardCounts = [
+    [
+        'name' => 'USER',
+        'count' => App\Model\User::count(),
+        'icon' => 'user',
+    ],
+    [
+        'name' => 'CATEGORY',
+        'count' => App\Model\Category::count(),
+        'icon' => 'bookmark',
+    ],
+    [
+        'name' => 'ITEM',
+        'count' => App\Model\Item::count(),
+        'icon' => 'box',
+    ],
+]
+?>
 @extends('admin.layouts.app')
 
 @section('head-script')
@@ -88,10 +111,12 @@
                                         <div class="table-responsive">
                                             <table class="table table-hover">
                                                 <tbody>
+
+                                                  @foreach($latestUsers as $user)
                                                     <tr class="unread">
                                                         <td><img class="rounded-circle" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user"></td>
                                                         <td>
-                                                            <h6 class="mb-1">Isabella Christensen</h6>
+                                                            <h6 class="mb-1">{{ $user->name }}</h6>
                                                             <p class="m-0">Lorem Ipsum is simply…</p>
                                                         </td>
                                                         <td>
@@ -99,50 +124,8 @@
                                                         </td>
                                                         <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
                                                     </tr>
-                                                    <tr class="unread">
-                                                        <td><img class="rounded-circle" style="width:40px;" src="assets/images/user/avatar-2.jpg" alt="activity-user"></td>
-                                                        <td>
-                                                            <h6 class="mb-1">Mathilde Andersen</h6>
-                                                            <p class="m-0">Lorem Ipsum is simply text of…</p>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="text-muted"><i class="fas fa-circle text-c-red f-10 m-r-15"></i>11 MAY 10:35</h6>
-                                                        </td>
-                                                        <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
-                                                    </tr>
-                                                    <tr class="unread">
-                                                        <td><img class="rounded-circle" style="width:40px;" src="assets/images/user/avatar-3.jpg" alt="activity-user"></td>
-                                                        <td>
-                                                            <h6 class="mb-1">Karla Sorensen</h6>
-                                                            <p class="m-0">Lorem Ipsum is simply…</p>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>9 MAY 17:38</h6>
-                                                        </td>
-                                                        <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
-                                                    </tr>
-                                                    <tr class="unread">
-                                                        <td><img class="rounded-circle" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user"></td>
-                                                        <td>
-                                                            <h6 class="mb-1">Ida Jorgensen</h6>
-                                                            <p class="m-0">Lorem Ipsum is simply text of…</p>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="text-muted f-w-300"><i class="fas fa-circle text-c-red f-10 m-r-15"></i>19 MAY 12:56</h6>
-                                                        </td>
-                                                        <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
-                                                    </tr>
-                                                    <tr class="unread">
-                                                        <td><img class="rounded-circle" style="width:40px;" src="assets/images/user/avatar-2.jpg" alt="activity-user"></td>
-                                                        <td>
-                                                            <h6 class="mb-1">Albert Andersen</h6>
-                                                            <p class="m-0">Lorem Ipsum is simply dummy…</p>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>21 July 12:56</h6>
-                                                        </td>
-                                                        <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
-                                                    </tr>
+                                                  @endforeach
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -153,7 +136,7 @@
 
                             <!-- [ statistics year chart ] start -->
                             <div class="col-xl-4 col-md-6">
-                                <div class="card card-event">
+                                {{-- <div class="card card-event">
                                     <div class="card-block">
                                         <div class="row align-items-center justify-content-center">
                                             <div class="col">
@@ -167,30 +150,23 @@
                                         <h6 class="text-muted mt-4 mb-0">You can participate in event </h6>
                                         <i class="fab fa-angellist text-c-purple f-50"></i>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="card">
+
+                                  @foreach($cardCounts as $cardCount)
                                     <div class="card-block border-bottom">
                                         <div class="row d-flex align-items-center">
                                             <div class="col-auto">
-                                                <i class="feather icon-zap f-30 text-c-green"></i>
+                                                <i class="feather icon-{{ $cardCount['icon'] }} f-40 text-c-green"></i>
                                             </div>
                                             <div class="col">
-                                                <h3 class="f-w-300">235</h3>
-                                                <span class="d-block text-uppercase">TOTAL IDEAS</span>
+                                                <h3 class="f-w-300">{{ $cardCount['count'] }}</h3>
+                                                <span class="d-block text-uppercase">TOTAL {{ $cardCount['name'] }}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-block">
-                                        <div class="row d-flex align-items-center">
-                                            <div class="col-auto">
-                                                <i class="feather icon-map-pin f-30 text-c-blue"></i>
-                                            </div>
-                                            <div class="col">
-                                                <h3 class="f-w-300">26</h3>
-                                                <span class="d-block text-uppercase">TOTAL LOCATIONS</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  @endforeach
+
                                 </div>
                             </div>
                             <!-- [ statistics year chart ] end -->
@@ -225,72 +201,52 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-xl-4">
                                 <div class="card card-social">
                                     <div class="card-block border-bottom">
                                         <div class="row align-items-center justify-content-center">
                                             <div class="col-auto">
-                                                <i class="fab fa-twitter text-c-blue f-36"></i>
+                                                <i class="fab fa-facebook-f text-primary f-36"></i>
                                             </div>
                                             <div class="col text-right">
-                                                <h3>11,200</h3>
-                                                <h5 class="text-c-purple mb-0">+6.2% <span class="text-muted">Total Likes</span></h5>
+                                                <h3>12,281</h3>
+                                                <h5 class="text-c-green mb-0">+7.2% <span class="text-muted">Total Likes</span></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-block">
                                         <div class="row align-items-center justify-content-center card-active">
                                             <div class="col-6">
-                                                <h6 class="text-center m-b-10"><span class="text-muted m-r-5">Target:</span>34,185</h6>
+                                                <h6 class="text-center m-b-10"><span class="text-muted m-r-5">Target:</span>35,098</h6>
                                                 <div class="progress">
-                                                    <div class="progress-bar progress-c-green" role="progressbar" style="width:40%;height:6px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width:60%;height:6px;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                             <div class="col-6">
-                                                <h6 class="text-center  m-b-10"><span class="text-muted m-r-5">Duration:</span>4,567</h6>
+                                                <h6 class="text-center  m-b-10"><span class="text-muted m-r-5">Duration:</span>3,539</h6>
                                                 <div class="progress">
-                                                    <div class="progress-bar progress-c-blue" role="progressbar" style="width:70%;height:6px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar progress-c-theme2" role="progressbar" style="width:45%;height:6px;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card card-social">
-                                    <div class="card-block border-bottom">
-                                        <div class="row align-items-center justify-content-center">
-                                            <div class="col-auto">
-                                                <i class="fab fa-google-plus-g text-c-red f-36"></i>
-                                            </div>
-                                            <div class="col text-right">
-                                                <h3>10,500</h3>
-                                                <h5 class="text-c-blue mb-0">+5.9% <span class="text-muted">Total Likes</span></h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-block">
-                                        <div class="row align-items-center justify-content-center card-active">
-                                            <div class="col-6">
-                                                <h6 class="text-center m-b-10"><span class="text-muted m-r-5">Target:</span>25,998</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width:80%;height:6px;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <h6 class="text-center  m-b-10"><span class="text-muted m-r-5">Duration:</span>7,753</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-c-theme2" role="progressbar" style="width:50%;height:6px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-md-12 col-xl-8">
+
+                              <div class="card">
+                                  <div class="card-header">
+                                      <h5>Sale Chart</h5>
+                                  </div>
+                                  <div class="card-block">
+                                      <canvas id="myChart" width="100"></canvas>
+
+                                  </div>
+                              </div>
+
                             </div>
                             <!--[social-media section] end-->
                             <!-- [ rating list ] starts-->
-                            <div class="col-xl-4 col-md-6">
+                            {{-- <div class="col-xl-4 col-md-6">
                                 <div class="card user-list">
                                     <div class="card-header">
                                         <h5>Rating</h5>
@@ -343,9 +299,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- [ rating list ] end-->
-                            <div class="col-xl-8 col-md-12 m-b-30">
+                            {{-- <div class="col-xl-8 col-md-12 m-b-30">
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Today</a>
@@ -588,7 +544,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
                         <!-- [ Main Content ] end -->
@@ -601,5 +557,55 @@
 <script src="{{ asset('dattalite/assets/js/vendor-all.min.js') }}"></script>
   <script src="{{ asset('dattalite/assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('dattalite/assets/js/pcoded.min.js') }}"></script>
+
+    {{-- ChartJs --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<script type="text/javascript">
+  var ctx = document.getElementById('myChart');
+  var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          datasets: [{
+              label: 'Item',
+              data: [12, 19, 3, 5, 2, 3],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.7)',
+                  'rgba(54, 162, 235, 0.7)',
+                  'rgba(255, 206, 86, 0.7)',
+                  'rgba(75, 192, 192, 0.7)',
+                  'rgba(153, 102, 255, 0.7)',
+                  'rgba(255, 159, 64, 0.7)'
+              ],
+              // borderColor: [
+              //     'rgba(255, 99, 132, 1)',
+              //     'rgba(54, 162, 235, 1)',
+              //     'rgba(255, 206, 86, 1)',
+              //     'rgba(75, 192, 192, 1)',
+              //     'rgba(153, 102, 255, 1)',
+              //     'rgba(255, 159, 64, 1)'
+              // ],
+              borderWidth: 2
+          }]
+      },
+      options: {
+
+          // padding: {
+          //   left: 50,
+          //   right: 50,
+          //   top: 100,
+          //   bottom: 0
+          // },
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+</script>
 
 @endsection

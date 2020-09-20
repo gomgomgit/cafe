@@ -36,7 +36,7 @@
                   <hr>
                   <div class="row">
                       <div class="col-lg-12">
-                          <form action="{{ route('admin.items.updateItem', $data->id) }}" method="post">
+                          <form action="{{ route('admin.items.updateItem', $data->id) }}" method="post" enctype="multipart/form-data">
                               @csrf
                               @method('PUT')
                               @if ($errors->any())

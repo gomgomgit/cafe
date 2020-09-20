@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
+Route::get('/', 'HomeController@shop')->name('shop');
 
 Route::prefix('/admin')->name('admin.')->group(function () {
 
@@ -40,6 +41,9 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/edit/{id}', 'CategoryController@edit')->name('edit');
         Route::put('/update/{id}', 'CategoryController@update')->name('update');
         Route::delete('/delete/{id}', 'CategoryController@delete')->name('delete');
+        Route::get('/trash', 'CategoryController@trash')->name('trash');
+        Route::get('/restore/{id}', 'CategoryController@restore')->name('restore');
+        Route::delete('/force-delete/{id}', 'CategoryController@forceDelete')->name('forceDelete');
 
     });
 
@@ -59,6 +63,9 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::put('/update-detail-option/{id}', 'ItemController@updateDetailOption')->name('updateDetailOption');
         Route::put('/update/{id}', 'ItemController@update')->name('update');
         Route::delete('/delete/{id}', 'ItemController@delete')->name('delete');
+        Route::get('/trash', 'ItemController@trash')->name('trash');
+        Route::get('/restore/{id}', 'ItemController@restore')->name('restore');
+        Route::delete('/force-delete/{id}', 'ItemController@forceDelete')->name('forceDelete');
     });
 
     Route::prefix('/variants')->name('variants.')->group(function () {
@@ -90,6 +97,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
 
     Route::prefix('/orders')->name('orders.')->group(function () {
         Route::get('/', 'OrderController@index')->name('index');
+        Route::get('/detail/{id}', 'OrderController@detail')->name('detail');
         Route::get('/create', 'OrderController@create')->name('create');
         Route::post('/store', 'OrderController@store')->name('store');
         Route::get('/edit/{id}', 'OrderController@edit')->name('edit');

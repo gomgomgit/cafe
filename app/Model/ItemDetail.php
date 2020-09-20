@@ -10,6 +10,11 @@ class ItemDetail extends Model
         'item_id', 'variant_id', 'size_id', 'price',
     ];
 
+    public function item()
+    {
+        return $this->belongsTo('App\Model\Item');
+    }
+
     public function variant()
     {
         return $this->belongsTo('App\Model\Variant');

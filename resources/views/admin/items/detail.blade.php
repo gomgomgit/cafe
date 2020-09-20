@@ -10,6 +10,8 @@ foreach ($details as $key => $detail) {
         array_push($sizes, $detail->size->name);
     }
 }
+$ingredients = $detail->first()->ingredients()->pluck('name');
+$item = App\Model\Item::find($data->id);
 ?>
 
 @extends('admin.layouts.app')
@@ -62,7 +64,11 @@ foreach ($details as $key => $detail) {
                             </div>
                             <div class="title-total">
                               <div class="title">{{ $data->category->name }}</div>
-                              <h2>{{ $data->name }} <a class="h5 text-info text-right" href="{{ route('admin.items.editItem', $data->id) }}"><i class="feather icon-edit-1"></i></a></h2>
+                              <h2>{{ $data->name }}
+                                @can('update', $data)
+                                  <a class="h5 text-info text-right" href="{{ route('admin.items.editItem', $data->id) }}"><i class="feather icon-edit-1"></i></a>
+                                @endcan
+                              </h2>
 
                               <div class="desc">{{ $data->description }}</div>
 
@@ -80,6 +86,14 @@ foreach ($details as $key => $detail) {
 
                                 @foreach($sizes as $size)
                                 <span class="tp"> {{ ($size) }},</span>
+                                @endforeach
+                              </div>
+                              <div class="type desc">
+
+                                <p class="font-weight-bold text-lg text-dark m-0 mb-2">Ingredients :</p>
+
+                                @foreach($ingredients as $ingredient)
+                                <span class="tp"> {{ ($ingredient) }},</span>
                                 @endforeach
                               </div>
 
@@ -111,12 +125,19 @@ foreach ($details as $key => $detail) {
                                 <p class="price-list"> {{ $no .'. '.
                                   ($detail->variant->id == 1 ? '' : $detail->variant->name) .' ' .$data->name.' '.
                                   ($detail->size->id == 1 ? '' : ' Size: '. $detail->size->name) .': Rp.'.$detail->price}}
+
+                                  @can('update', $data)
                                     <a class=" text-info text-right" href="{{ route('admin.items.editDetail', $detail->id) }}"><i class="feather icon-edit-1"></i></a>
+                                  @endcan
                                 </p>
                                 @endforeach
+
+
+                                @can('update', $data)
                                 <hr>
 
                                 <a class="btn btn-info" href="{{ route('admin.items.editOption', $data->id) }}">Edit Menu Option</a>
+                                @endcan
                               </div>
 
                               {{-- <div class="actions">

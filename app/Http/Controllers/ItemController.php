@@ -11,6 +11,7 @@ use App\Model\Variant;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ItemController extends Controller
 {
@@ -22,6 +23,7 @@ class ItemController extends Controller
         $this->view = 'admin.items.';
         $this->redirect = '/admin/items';
         $this->name = 'items';
+        $this->imgDir = public_path('image');
     }
     public function index(Request $request)
     {
@@ -33,9 +35,9 @@ class ItemController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
-                    $button = '<a href="' . $this->name . '/detail/' . $data->id . '" class="btn btn-sm btn-info"><i class="feather icon-info"></i>Detail</a>';
+                    $button = '<a href="' . $this->redirect . '/detail/' . $data->id . '" class="btn btn-sm btn-info"><i class="feather icon-info"></i>Detail</a>';
                     // $button .= '<a href="' . $this->name . '/choose-edit/' . $data->id . '" class="btn btn-sm btn-primary"><i class="feather icon-edit"></i>Edit</a>';
-                    $button .= '<form class=" d-inline-block" method="post" action="' . $this->name . '/delete/' . $data->id . '">
+                    $button .= '<form class=" d-inline-block" method="post" action="' . $this->redirect . '/delete/' . $data->id . '">
                                     ' . csrf_field() . '
                                     ' . method_field('DELETE') . '
                                     <button class="btn btn-sm btn-danger"><i class="feather icon-trash-2"></i>Delete</button>
@@ -101,6 +103,14 @@ class ItemController extends Controller
             'ingredientId' => 'required',
             'ingredientQty' => 'required',
         ]);
+
+        if ($request->image_file) {
+            $request = $this->storeImage($request);
+        } else {
+            $request->merge([
+                'image' => 'coffee.jpg',
+            ]);
+        }
 
         $item = Item::create($request->all());
 
@@ -169,7 +179,7 @@ class ItemController extends Controller
         $this->authorize('view', $this->model);
         $data = $this->model->find($id);
         $details = ItemDetail::where('item_id', $id)->get();
-        return view($this->view . 'detail', compact('data', 'details', 'ingredients'));
+        return view($this->view . 'detail', compact('data', 'details'));
     }
     public function editItem($id)
     {
@@ -183,7 +193,9 @@ class ItemController extends Controller
     public function editDetail($id)
     {
         $data = ItemDetail::find($id);
-        $this->authorize('update', $data);
+        $item = $this->model->find($data->item_id);
+        // dd($item);
+        $this->authorize('update', $item);
         return view('admin.items.editDetail', compact('data'));
     }
     public function editOption($id)
@@ -225,10 +237,16 @@ class ItemController extends Controller
         $data = $this->model->find($id);
         $this->authorize('update', $data);
 
+        if ($request->image_file) {
+            $this->removeImage($data->image);
+            $request = $this->storeImage($request);
+        }
+
         $details = ItemDetail::where('item_id', $id)->get();
 
         $data->name = $request->name;
         $data->category_id = $request->category_id;
+        $data->image = $request->image;
         if ($request->description) {
             $data->description = $request->description;
         }
@@ -267,6 +285,13 @@ class ItemController extends Controller
             'ingredientId' => 'required',
             'ingredientQty' => 'required',
         ]);
+
+        // Image file
+
+        // if ($request->image_file) {
+        //     $this->removeImage($data->image);
+        //     $request = $this->storeImage($request);
+        // }
 
         $item = $model->update($request->all());
 
@@ -310,16 +335,79 @@ class ItemController extends Controller
 
         return redirect('/admin/items/detail/' . $id);
     }
-    public function update(Request $request, $id)
+
+    public function storeImage($request)
     {
-        //
+        $img = $request->file('image_file');
+        $newName = Str::camel($request->name) . time() . '.' . $img->getClientOriginalExtension();
+
+        $img->move($this->imgDir, $newName);
+        $request->merge([
+            'image' => $newName,
+        ]);
+        return $request;
     }
+
+    public function removeImage($image)
+    {
+        $imagePath = $this->imgDir . '/' . $image;
+
+        if ($image != 'coffee.jpg' && file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+    }
+
     public function delete($id)
     {
         $model = $this->model->find($id);
         $this->authorize('update', $model);
+
+        $this->removeImage($model->image);
+
         $model->delete();
         ItemDetail::where('item_id', '$id')->delete();
         return redirect($this->redirect);
+    }
+
+    public function trash(Request $request)
+    {
+        $this->authorize('update', $this->model);
+
+        if ($request->ajax()) {
+            $data = $this->model->onlyTrashed()->get();
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $button = '<a href="' . $this->redirect . '/restore/' . $data->id . '" class="btn btn-sm btn-primary"><i class="feather icon-corner-down-left"></i>Restore</a>';
+                    $button .= '<form class=" d-inline-block" method="post" action="' . $this->redirect . '/force-delete/' . $data->id . '">
+                                    ' . csrf_field() . '
+                                    ' . method_field('DELETE') . '
+                                    <button class="btn btn-sm btn-danger"><i class="feather icon-trash-2"></i>Force Delete</button>
+                                </form>';
+
+                    return $button;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view($this->view . 'trash');
+
+    }
+
+    public function restore($id)
+    {
+        $this->authorize('update', $this->model);
+        $this->model->onlyTrashed()->find($id)->restore();
+
+        return redirect()->back();
+    }
+
+    public function forceDelete($id)
+    {
+        $this->model->onlyTrashed()->find($id)->forceDelete();
+
+        return redirect()->back();
     }
 }

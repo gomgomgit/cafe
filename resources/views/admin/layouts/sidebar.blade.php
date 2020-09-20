@@ -15,10 +15,12 @@ $menus = [
             [
                 'title' => 'Item List',
                 'route' => 'admin.items.index',
+                'policy' => 'viewAny',
             ],
             [
                 'title' => 'Add Item',
                 'route' => 'admin.items.create',
+                'policy' => 'create',
             ],
         ],
     ],
@@ -31,10 +33,12 @@ $menus = [
             [
                 'title' => 'Category List',
                 'route' => 'admin.categories.index',
+                'policy' => 'viewAny',
             ],
             [
                 'title' => 'Add Category',
                 'route' => 'admin.categories.create',
+                'policy' => 'create',
             ],
         ],
     ],
@@ -47,10 +51,12 @@ $menus = [
             [
                 'title' => 'Variant List',
                 'route' => 'admin.variants.index',
+                'policy' => 'viewAny',
             ],
             [
                 'title' => 'Add Variant',
                 'route' => 'admin.variants.create',
+                'policy' => 'create',
             ],
         ],
     ],
@@ -63,10 +69,12 @@ $menus = [
             [
                 'title' => 'Size List',
                 'route' => 'admin.sizes.index',
+                'policy' => 'viewAny',
             ],
             [
                 'title' => 'Add Size',
                 'route' => 'admin.sizes.create',
+                'policy' => 'create',
             ],
         ],
     ],
@@ -79,10 +87,12 @@ $menus = [
             [
                 'title' => 'Ingredient List',
                 'route' => 'admin.ingredients.index',
+                'policy' => 'viewAny',
             ],
             [
                 'title' => 'Add Ingredient',
                 'route' => 'admin.ingredients.create',
+                'policy' => 'create',
             ],
         ],
     ],
@@ -95,10 +105,12 @@ $menus = [
             [
                 'title' => 'Order List',
                 'route' => 'admin.orders.index',
+                'policy' => 'viewAny',
             ],
             [
                 'title' => 'Add Order',
                 'route' => 'admin.orders.create',
+                'policy' => 'create',
             ],
         ],
     ],
@@ -106,6 +118,7 @@ $menus = [
         'title' => 'User',
         'icon' => 'user',
         'route' => 'admin.users.index',
+        'policy' => 'viewAny',
         'model' => App\Model\User::class,
     ],
 ]
@@ -132,18 +145,20 @@ $menus = [
                 @can('viewAny', $menu['model'])
 
                   @if(isset($menu['subMenu']))
-                    <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu {{ Request::routeIs("$menu[route]*") ? 'active pcoded-trigger' : '' }}">
+                    <li data-username="{{ $menu['title'] }} components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu {{ Request::routeIs("$menu[route]*") ? 'active pcoded-trigger' : '' }}">
                         <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-{{ $menu['icon'] }}"></i></span><span class="pcoded-mtext">{{ $menu['title'] }}</span></a>
                         <ul class="pcoded-submenu">
                           @foreach($menu['subMenu'] as $subMenu)
+                            @can($subMenu['policy'], $menu['model'])
                             <li class="{{ Request::routeIs("$subMenu[route]*") ? 'active' : '' }}"><a href="{{ route($subMenu['route']) }}" class="">{{ $subMenu['title'] }}</a></li>
+                            @endcan
                           @endforeach
                         </ul>
                     </li>
 
                   @else
 
-                    <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item {{ Request::routeIs("$menu[route]*") ? 'active' : '' }}">
+                    <li data-username="{{ $menu['title'] }} Default Ecommerce CRM Analytics Crypto Project" class="nav-item {{ Request::routeIs("$menu[route]*") ? 'active' : '' }}">
                         <a href="{{ route($menu['route']) }}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-{{ $menu['icon'] }}"></i></span><span class="pcoded-mtext">{{ $menu['title'] }}</span></a>
                     </li>
 

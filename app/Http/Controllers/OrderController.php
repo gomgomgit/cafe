@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Item;
+use App\Model\ItemDetail;
 use App\Model\Order;
+use App\Model\OrderDetail;
+use DataTables;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -12,19 +16,46 @@ class OrderController extends Controller
         $this->middleware('auth');
 
         $this->model = new Order();
-        $this->view = 'orders.';
-        $this->redirect = '/orders';
+        $this->view = 'admin.orders.';
+        $this->redirect = '/admin/orders';
+        $this->name = 'orders';
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $datas = $this->model->all();
-        return view($this->view . 'index', compact('datas'));
+        // $this->authorize('viewAny', $this->model);
+
+        if ($request->ajax()) {
+            $data = $this->model->all();
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $button = '<a href="' . $this->redirect . '/detail/' . $data->id . '" class="btn btn-sm btn-info"><i class="feather icon-info"></i>Detail</a>';
+                    $button .= '<a href="' . $this->redirect . '/edit/' . $data->id . '" class="btn btn-sm btn-primary"><i class="feather icon-edit"></i>Edit</a>';
+                    $button .= '<form class=" d-inline-block" method="post" action="' . $this->redirect . '/delete/' . $data->id . '">
+                                    ' . csrf_field() . '
+                                    ' . method_field('DELETE') . '
+                                    <button class="btn btn-sm btn-danger"><i class="feather icon-trash-2"></i>Delete</button>
+                                </form>';
+
+                    return $button;
+                })
+                ->rawColumns(['action'])
+                ->editColumn('user_id', function (Order $order) {
+                    return $order->user->name;
+                })
+                ->make(true);
+        }
+
+        return view($this->view . 'index');
+    }
+
+    public function detail($id)
+    {
+        $order = $this->model->find($id);
+        $details = OrderDetail::where('order_id', $id)->get();
+        return view('admin.orders.detail', compact('order', 'details'));
     }
 
     /**
@@ -34,7 +65,10 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view($this->view . 'create');
+        $items = Item::all();
+        $details = ItemDetail::with('variant')->with('size')->get();
+        // dd($details->first());
+        return view($this->view . 'create', compact('items', 'details'));
     }
 
     /**
@@ -45,7 +79,28 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'customer' => 'required',
+            'total' => 'required',
+            'itemdetail.*' => 'required',
+            'qty.*' => 'required',
+        ]);
+
+        $order = $this->model->create([
+            'user_id' => auth()->user()->id,
+            'customer' => $request->customer,
+            'total' => $request->total,
+        ]);
+
+        for ($i = 0; $i < count($request->itemdetail); $i++) {
+            $order->orderDetails()->create([
+                'item_detail_id' => $request->itemdetail[$i],
+                'qty' => $request->qty[$i],
+                'sub_total' => $request->subtotal[$i],
+            ]);
+        };
+
+        return redirect($this->redirect);
     }
 
     /**
@@ -67,7 +122,11 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = Order::with('orderDetails.itemDetail')->findOrFail($id);
+        $items = Item::all();
+        $details = ItemDetail::with('variant')->with('size')->get();
+        // dd($order->orderDetails);
+        return view($this->view . 'edit', compact('order', 'items', 'details'));
     }
 
     /**
@@ -79,7 +138,31 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $order = $this->model->find($id);
+        $order->orderDetails()->delete();
+
+        $this->validate($request, [
+            'customer' => 'required',
+            'total' => 'required',
+            'itemdetail.*' => 'required',
+            'qty.*' => 'required',
+        ]);
+
+        $order->update([
+            'user_id' => auth()->user()->id,
+            'customer' => $request->customer,
+            'total' => $request->total,
+        ]);
+
+        for ($i = 0; $i < count($request->itemdetail); $i++) {
+            $order->orderDetails()->create([
+                'item_detail_id' => $request->itemdetail[$i],
+                'qty' => $request->qty[$i],
+                'sub_total' => $request->subtotal[$i],
+            ]);
+        };
+
+        return redirect($this->redirect);
     }
 
     /**
@@ -88,8 +171,12 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+        $order = $this->model->find($id);
+        $order->orderDetails()->delete();
+        $order->delete();
+
+        return redirect()->back();
     }
 }

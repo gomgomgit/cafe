@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Category;
 use App\Model\Item;
+use App\Model\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -19,8 +20,9 @@ class DashboardController extends Controller
         // $this->authorize('view', $this->model);
         $items = Item::all();
         $categories = Category::all();
+        $users = User::latest()->take(5)->get();
 
-        return view('admin.dashboard.index');
+        return view('admin.dashboard.index', compact('items', 'categories', 'users'));
     }
 
     public function create()

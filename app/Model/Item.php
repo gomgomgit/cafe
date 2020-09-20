@@ -3,9 +3,11 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'category_id', 'name', 'image', 'description',
     ];
@@ -17,6 +19,6 @@ class Item extends Model
 
     public function detail()
     {
-        return $this->hasMany('App\Model\ItemDetail');
+        return $this->hasMany('App\Model\ItemDetail', 'item_id', 'id');
     }
 }

@@ -104,7 +104,7 @@ $detailCount = 0;
 
                               <div class="form-group">
                                   <label for="description" class="text-dark font-weight-bold mb-2">Description</label>
-                                  <textarea class="form-control" id="description" rows="3"></textarea>
+                                  <textarea class="form-control" id="description" rows="3" name="description"></textarea>
                               </div>
 
                               <button type="submit" class="btn btn-primary">Create</button>
