@@ -61,6 +61,7 @@
                                   <th>No</th>
                                   <th>User</th>
                                   <th>Customer Name</th>
+                                  <th>Date</th>
                                   <th>Total</th>
                                   <th>Action</th>
                               </tr>
@@ -117,6 +118,7 @@
 					{data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false},
           {data: 'user_id', name: 'user_id'},
           {data: 'customer', name: 'customer'},
+          {data: 'created_at', name: 'created_at'},
           {data: 'total', name: 'total'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 				],

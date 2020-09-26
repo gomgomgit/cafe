@@ -117,7 +117,11 @@
                                           </td>
                                       </tr>
                                       <tr>
-                                          <th scope="row"></th>
+                                          <th scope="row">
+                                            {{-- <template x-for="i in row.ingredient" :key="i.id">
+                                              <span x-text="i.name"></span>
+                                            </template> --}}
+                                          </th>
                                           <td class="h6">PRICE</td>
                                           <td class="h6">
                                             Rp. <span x-text="row.price"></span>
@@ -137,6 +141,9 @@
                                           </td>
                                           <td></td>
                                       </tr>
+                                      {{-- <template x-for="ingr in row.ingre" :key="ingr.id">
+                                        <p x-text="ingr.name"></p>
+                                      </template> --}}
                                   </tbody>
                                 </template>
 
@@ -156,6 +163,10 @@
                                   </tr>
                                 </tfoot>
                             </table>
+
+                            {{-- <template x-for="(ingredient,index) in ingredients" :key="ingredient">
+                              <p x-text="ingredient.name + ' ' + ingredient.stock"></p>
+                            </template> --}}
                         </div>
                     </div>
                   </form>
@@ -180,7 +191,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/skipper-slider@1.2.1/Gruntfile.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/skipper-slider@1.2.1/Gruntfile.min.js"></script> --}}
 
     {{-- Ramda --}}
     {{-- buat distict --}}
@@ -193,6 +204,7 @@
           item_id: null,
           variants: [],
           sizes:[],
+          // ingredient: [],
           variant_id: 0,
           size_id: 0,
           price: 0,
@@ -203,6 +215,7 @@
         const details = @json($details);
 
         return {
+          // ingredients: @json($ingredients),
           rows: [ Object.assign({}, initialRow) ],
           total: 0,
 
@@ -231,9 +244,12 @@
           setDetail(id, index) {
             const item = items.find(item => item.id == id);
             let detail = item && details.filter(detail => detail.item_id == id);
-            const variant = detail && detail.map(d => d.variant);
+            const nvariant = detail && detail.map(d => d.variant);
+            const variant = nvariant && nvariant.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i)
             // const variantName = detail && new Set(detail.map(d => d.variant.name));
-            const size = detail && detail.map(d => d.size);
+            // const size = detail && detail.map(d=>d.pluck('size'));
+            const nsize = detail && detail.map(d => d.size);
+            const size = nsize && nsize.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i);
 
             // this.itemdetails = detail;
             this.rows[index].variants = variant;
@@ -249,10 +265,13 @@
             const detail = details.filter(d => d.item_id == row.item_id && d.variant_id == row.variant_id && d.size_id == row.size_id);
             const detailId = detail && detail.map(d => d.id);
             const price = detail && detail.map(d => d.price);
+            // const ingredient = detail[0] && detail[0].ingredients;
 
             row.detail = detailId;
             row.price = price;
+            // row.ingredient = ingredient;
             this.setSubtotal(index);
+            // console.log(row);
           },
 
           setSubtotal(index) {

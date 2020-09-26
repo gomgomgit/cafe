@@ -1,5 +1,6 @@
 <?php
 $latestUsers = App\Model\User::latest()->take(5)->get();
+$lastOrder = App\Model\Order::latest()->take(5)->get();
 $categoryCount = App\Model\Category::count();
 $itemCount = App\Model\Item::count();
 
@@ -19,7 +20,20 @@ $cardCounts = [
         'count' => App\Model\Item::count(),
         'icon' => 'box',
     ],
-]
+    [
+        'name' => 'ITEM ORDERED',
+        'count' => $items->pluck('ordered')->collapse()->sum('qty'),
+        'icon' => 'shopping-cart',
+    ],
+];
+
+$year = Carbon\Carbon::now()->format('Y');
+$month = Carbon\Carbon::now()->format('m');
+$totalIncome = App\Model\Order::pluck('total')->sum();
+$yearIncome = App\Model\Order::whereYear('created_at', $year)->pluck('total')->sum();
+$monthIncome = App\Model\Order::whereMonth('created_at', $month)->pluck('total')->sum();
+{{-- dd($yearIncome); --}}
+{{-- dd($month); --}}
 ?>
 @extends('admin.layouts.app')
 
@@ -44,10 +58,10 @@ $cardCounts = [
                             <div class="col-md-6 col-xl-4">
                                 <div class="card daily-sales">
                                     <div class="card-block">
-                                        <h6 class="mb-4">Daily Sales</h6>
+                                        <h6 class="mb-4">Month Sales</h6>
                                         <div class="row d-flex align-items-center">
                                             <div class="col-9">
-                                                <h3 class="f-w-300 d-flex align-items-center m-b-0"><i class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>$ 249.95</h3>
+                                                <h3 class="f-w-300 d-flex align-items-center m-b-0"><i class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>Rp.{{ $monthIncome }}</h3>
                                             </div>
 
                                             <div class="col-3 text-right">
@@ -65,10 +79,10 @@ $cardCounts = [
                             <div class="col-md-6 col-xl-4">
                                 <div class="card Monthly-sales">
                                     <div class="card-block">
-                                        <h6 class="mb-4">Monthly Sales</h6>
+                                        <h6 class="mb-4">Year Sales</h6>
                                         <div class="row d-flex align-items-center">
                                             <div class="col-9">
-                                                <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i class="feather icon-arrow-down text-c-red f-30 m-r-10"></i>$ 2.942.32</h3>
+                                                <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i class="feather icon-arrow-down text-c-red f-30 m-r-10"></i>Rp.{{ $yearIncome }}</h3>
                                             </div>
                                             <div class="col-3 text-right">
                                                 <p class="m-b-0">36%</p>
@@ -85,10 +99,10 @@ $cardCounts = [
                             <div class="col-md-12 col-xl-4">
                                 <div class="card yearly-sales">
                                     <div class="card-block">
-                                        <h6 class="mb-4">Yearly Sales</h6>
+                                        <h6 class="mb-4">Total Income</h6>
                                         <div class="row d-flex align-items-center">
                                             <div class="col-9">
-                                                <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>$ 8.638.32</h3>
+                                                <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>Rp.{{ $totalIncome }}</h3>
                                             </div>
                                             <div class="col-3 text-right">
                                                 <p class="m-b-0">80%</p>
@@ -105,24 +119,26 @@ $cardCounts = [
                             <div class="col-xl-8 col-md-6">
                                 <div class="card Recent-Users">
                                     <div class="card-header">
-                                        <h5>Recent Users</h5>
+                                        <h5>Lastest Order</h5>
                                     </div>
                                     <div class="card-block px-0 py-3">
                                         <div class="table-responsive">
                                             <table class="table table-hover">
                                                 <tbody>
 
-                                                  @foreach($latestUsers as $user)
+                                                  @foreach($lastOrder as $order)
                                                     <tr class="unread">
-                                                        <td><img class="rounded-circle" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user"></td>
                                                         <td>
-                                                            <h6 class="mb-1">{{ $user->name }}</h6>
-                                                            <p class="m-0">Lorem Ipsum is simply…</p>
+                                                            <h6 class="mb-1">{{ $order->customer }}</h6>
+                                                            <p class="m-0"></p>
                                                         </td>
                                                         <td>
-                                                            <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>11 MAY 12:56</h6>
+                                                            <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>
+                                                                {{ date('l, d-M-Y', strtotime($order->created_at))}}
+                                                            </h6>
                                                         </td>
-                                                        <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
+                                                        <td>Total: &nbsp; Rp.{{ $order->total }}</td>
+                                                        {{-- <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!" class="label theme-bg text-white f-12">Approve</a></td> --}}
                                                     </tr>
                                                   @endforeach
 
@@ -564,47 +580,26 @@ $cardCounts = [
 <script type="text/javascript">
   var ctx = document.getElementById('myChart');
   var myChart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          datasets: [{
-              label: 'Item',
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.7)',
-                  'rgba(54, 162, 235, 0.7)',
-                  'rgba(255, 206, 86, 0.7)',
-                  'rgba(75, 192, 192, 0.7)',
-                  'rgba(153, 102, 255, 0.7)',
-                  'rgba(255, 159, 64, 0.7)'
-              ],
-              // borderColor: [
-              //     'rgba(255, 99, 132, 1)',
-              //     'rgba(54, 162, 235, 1)',
-              //     'rgba(255, 206, 86, 1)',
-              //     'rgba(75, 192, 192, 1)',
-              //     'rgba(153, 102, 255, 1)',
-              //     'rgba(255, 159, 64, 1)'
-              // ],
-              borderWidth: 2
-          }]
-      },
-      options: {
-
-          // padding: {
-          //   left: 50,
-          //   right: 50,
-          //   top: 100,
-          //   bottom: 0
-          // },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
+      type: 'bar',
+          data: {
+              labels: @json($itemName),
+              datasets: [{
+                  label: 'Ordered',
+                  data: @json($itemOrdered),
+                  backgroundColor: '#6A2B05',
+                  borderColor: '#4A1B03',
+                  borderWidth: 5
               }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+              }
           }
-      }
   });
 </script>
 

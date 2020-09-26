@@ -122,14 +122,21 @@ $item = App\Model\Item::find($data->id);
 
                                 @foreach($details as $detail)
                                 @php $no++ @endphp
-                                <p class="price-list"> {{ $no .'. '.
-                                  ($detail->variant->id == 1 ? '' : $detail->variant->name) .' ' .$data->name.' '.
-                                  ($detail->size->id == 1 ? '' : ' Size: '. $detail->size->name) .': Rp.'.$detail->price}}
+                                <div>
+                                  <p class="price-list m-0"> {{ $no .'. '.
+                                    ($detail->variant->id == 1 ? '' : $detail->variant->name) .' ' .$data->name.' '.
+                                    ($detail->size->id == 1 ? '' : ' Size: '. $detail->size->name) .': Rp.'.$detail->price}}
 
-                                  @can('update', $data)
-                                    <a class=" text-info text-right" href="{{ route('admin.items.editDetail', $detail->id) }}"><i class="feather icon-edit-1"></i></a>
-                                  @endcan
-                                </p>
+                                    @can('update', $data)
+                                      <a class=" text-info text-right" href="{{ route('admin.items.editDetail', $detail->id) }}"><i class="feather icon-edit-1"></i></a>
+                                    @endcan
+                                  </p>
+                                  <p class="m-0 ml-3">
+                                    @foreach($detail->ingredients as $ingredient)
+                                    <span class="d-block">{{ $ingredient->name }}: {{ $ingredient->pivot->amount_ingredient }} mg/ml</span>
+                                    @endforeach
+                                  </p>
+                                </div>
                                 @endforeach
 
 

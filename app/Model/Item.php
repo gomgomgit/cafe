@@ -21,4 +21,9 @@ class Item extends Model
     {
         return $this->hasMany('App\Model\ItemDetail', 'item_id', 'id');
     }
+
+    public function ordered()
+    {
+        return $this->hasManyThrough('App\Model\OrderDetail', 'App\Model\ItemDetail');
+    }
 }

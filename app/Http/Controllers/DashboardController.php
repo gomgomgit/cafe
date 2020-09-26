@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Category;
 use App\Model\Item;
-use App\Model\User;
+use App\Model\Order;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -18,11 +18,24 @@ class DashboardController extends Controller
     public function index()
     {
         // $this->authorize('view', $this->model);
-        $items = Item::all();
-        $categories = Category::all();
-        $users = User::latest()->take(5)->get();
+        $items = Item::with('ordered')->get();
+        $itemName = Item::pluck('name');
+        // $itemOrdered = Item::with('detail.orderDetails')->get();
+        // $itemOrdered = $items->first()->ordered->sum('qty');
+        // $itemOrdered = $items->pluck('ordered.qty');
+        // $itemOrdered = $items->pluck('ordered')->collapse()->sum('qty');
 
-        return view('admin.dashboard.index', compact('items', 'categories', 'users'));
+        foreach ($items as $key => $item) {
+            $itemOrdered[] = $item->ordered->sum('qty');
+        }
+
+        // dd($itemOrdered);
+
+        // dd($itemOrdered->first()->ordered_count * $itemOrdered->first()->ordered()->qty);
+        $categories = Category::all();
+        $lastOrder = Order::latest()->take(5)->get();
+
+        return view('admin.dashboard.index', compact('items', 'itemName', 'itemOrdered', 'categories', 'lastOrder'));
     }
 
     public function create()

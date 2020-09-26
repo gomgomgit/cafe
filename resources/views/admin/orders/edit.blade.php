@@ -152,7 +152,7 @@
                                       <input type="hidden" name="total" x-model="total">
                                     </td>
                                     <td>
-                                      <button class="btn btn-info w-100"><i class="feather icon-shopping-cart h5"></i>Order</button>
+                                      <button class="btn btn-info w-100"><i class="feather icon-shopping-cart h5"></i>Edit Order</button>
                                     </td>
                                   </tr>
                                 </tfoot>

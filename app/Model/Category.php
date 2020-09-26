@@ -12,6 +12,11 @@ class Category extends Model
         'name',
     ];
 
+    public function items()
+    {
+        return $this->hasMany('App\Model\Item', 'category_id', 'id');
+    }
+
     public function itemCount()
     {
         return $this->hasMany('App\Model\Item', 'category_id', 'id')->count();

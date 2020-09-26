@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Ingredient;
 use App\Model\Item;
 use App\Model\ItemDetail;
 use App\Model\Order;
@@ -26,7 +27,7 @@ class OrderController extends Controller
         // $this->authorize('viewAny', $this->model);
 
         if ($request->ajax()) {
-            $data = $this->model->all();
+            $data = $this->model->orderBy('created_at', 'desc')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -44,6 +45,9 @@ class OrderController extends Controller
                 ->rawColumns(['action'])
                 ->editColumn('user_id', function (Order $order) {
                     return $order->user->name;
+                })
+                ->editColumn('created_at', function (Order $order) {
+                    return date('l d-M-Y', strtotime($order->created_at));
                 })
                 ->make(true);
         }
@@ -66,9 +70,10 @@ class OrderController extends Controller
     public function create()
     {
         $items = Item::all();
-        $details = ItemDetail::with('variant')->with('size')->get();
+        $details = ItemDetail::with('variant')->with('size')->with('ingredients')->get();
+        $ingredients = Ingredient::all();
         // dd($details->first());
-        return view($this->view . 'create', compact('items', 'details'));
+        return view($this->view . 'create', compact('items', 'details', 'ingredients'));
     }
 
     /**
@@ -98,6 +103,16 @@ class OrderController extends Controller
                 'qty' => $request->qty[$i],
                 'sub_total' => $request->subtotal[$i],
             ]);
+            $detail = ItemDetail::with('ingredients')->find($request->itemdetail[$i]);
+            foreach ($detail->ingredients as $key => $ingredient) {
+                $usedIngredient = Ingredient::find($ingredient->id);
+                $stock = $ingredient->stock;
+                $used = $ingredient->pivot->amount_ingredient * $request->qty[$i];
+                $nowStock = $stock - $used;
+                $usedIngredient->update(['stock' => $nowStock]);
+                // dd($ingredient->stock);
+            };
+            // dd($detail->ingredients->first()->id);
         };
 
         return redirect($this->redirect);
@@ -139,6 +154,23 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         $order = $this->model->find($id);
+
+        foreach ($order->orderDetails as $key => $orderDetail) {
+            $detail = ItemDetail::with('ingredients')->find($orderDetail->item_detail_id);
+            foreach ($detail->ingredients as $key => $ingredient) {
+                $usedIngredient = Ingredient::find($ingredient->id);
+                $stock = $ingredient->stock;
+                $used = $ingredient->pivot->amount_ingredient * $orderDetail->qty;
+                $nowStock = $stock + $used;
+                $usedIngredient->update(['stock' => $nowStock]);
+                // dd($usedIngredient);
+            };
+            // dd($orderDetail->qty);
+        };
+
+        // dd($order->orderDetails->first()->item_detail_id);
+        // dd(Ingredient::find(1)->stock);
+
         $order->orderDetails()->delete();
 
         $this->validate($request, [
@@ -160,6 +192,15 @@ class OrderController extends Controller
                 'qty' => $request->qty[$i],
                 'sub_total' => $request->subtotal[$i],
             ]);
+            $detail = ItemDetail::with('ingredients')->find($request->itemdetail[$i]);
+            foreach ($detail->ingredients as $key => $ingredient) {
+                $usedIngredient = Ingredient::find($ingredient->id);
+                $stock = $ingredient->stock;
+                $used = $ingredient->pivot->amount_ingredient * $request->qty[$i];
+                $nowStock = $stock - $used;
+                $usedIngredient->update(['stock' => $nowStock]);
+                // dd($ingredient->stock);
+            };
         };
 
         return redirect($this->redirect);

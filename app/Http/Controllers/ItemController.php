@@ -30,7 +30,7 @@ class ItemController extends Controller
         $this->authorize('viewAny', $this->model);
 
         if ($request->ajax()) {
-            $data = $this->model->all();
+            $data = $this->model->orderBy('created_at', 'desc')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
