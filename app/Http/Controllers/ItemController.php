@@ -86,6 +86,7 @@ class ItemController extends Controller
             'category_id' => 'required',
             'variants' => 'required',
             'sizes' => 'required',
+            'ingredients' => 'required',
         ]);
 
         $data = $request;
@@ -213,8 +214,8 @@ class ItemController extends Controller
     }
     public function editDetailOption(Request $request, $id)
     {
-
         $data = $request;
+        // dd($data);
 
         $item = $this->model->find($id);
 
@@ -257,7 +258,8 @@ class ItemController extends Controller
     public function updateDetail(Request $request, $id)
     {
         $data = ItemDetail::find($id);
-        $this->authorize('update', $data);
+        $item = $data->item;
+        $this->authorize('update', $item);
 
         $request->validate([
             'price' => 'required',
@@ -272,6 +274,7 @@ class ItemController extends Controller
     }
     public function updateDetailOption(Request $request, $id)
     {
+        // dd($request);
         $model = Item::find($id);
 
         $this->authorize('update', $model);
@@ -281,7 +284,7 @@ class ItemController extends Controller
             'category_id' => 'required',
             'variant' => 'required',
             'size' => 'required',
-            'price' => 'required',
+            'price.*' => 'required',
             'ingredientId' => 'required',
             'ingredientQty' => 'required',
         ]);
@@ -293,11 +296,12 @@ class ItemController extends Controller
         //     $request = $this->storeImage($request);
         // }
 
-        $item = $model->update($request->all());
+        // $item = $model->update($request->all());
 
         $ingredients = 0;
 
         $itemDetails = ItemDetail::where('item_id', $id)->get();
+        // dd($itemDetails);
         // $itemDetails->delete();
         foreach ($itemDetails as $key => $itemDetail) {
             //     $itemDetail->ingredients()->detach();

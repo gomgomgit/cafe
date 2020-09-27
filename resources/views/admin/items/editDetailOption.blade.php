@@ -101,7 +101,7 @@ function qtyIngredient($detail, $id)
 
                                   <div class="form-group">
                                       <label for="" class="font-weight-bold text-dark">Price</label>
-                                      <input type="number" class="form-control" id="" name="price[]" placeholder="Price" value="{{ $detailData ? $detailData->price : '' }}">
+                                      <input type="number" class="form-control" id="" name="price[]" placeholder="Price" value="{{ $detailData ? $detailData->price : '' }}" required>
                                   </div>
 
                                   <p class="text-dark font-weight-bold mb-2">Ingredients:</p>

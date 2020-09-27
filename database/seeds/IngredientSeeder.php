@@ -15,6 +15,11 @@ class IngredientSeeder extends Seeder
         Ingredient::truncate();
 
         Ingredient::create([
+            'name' => 'Other',
+            'stock' => '9900000',
+        ]);
+
+        Ingredient::create([
             'name' => 'Coffee',
             'stock' => '50000',
         ]);

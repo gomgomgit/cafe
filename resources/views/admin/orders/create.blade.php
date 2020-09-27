@@ -44,7 +44,7 @@
                     <div>
                       <div class="form-group">
                           <label for="exampleInputEmail1" class="text-dark h6">Customer Name</label>
-                          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Name" name="customer" value="{{ old('customer') }}">
+                          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Name" name="customer" value="{{ old('customer') }}" required>
                       </div>
                     </div>
                         <div class="table-responsive" x-data="alpine()" x-init="() => { initSelect() }">
@@ -64,13 +64,13 @@
                                           <th scope="row" class="h5"><span x-text="index + 1"></span></th>
                                           <td colspan="2">
                                             <select
-                                              class="form-control w-100 selectdua"
+                                              class="form-control w-100 selectduaitem"
                                               :class="'rowitem' + index"
                                               x-model="row.item_id"
                                               {{-- x-on:change="setDetail(row.item_id, index)" --}}
                                               style="display: none;"
                                             >
-                                              <option>-Select Item-</option>
+                                              <option></option>
                                               @foreach($items as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                               @endforeach
@@ -79,12 +79,12 @@
                                           </td>
                                           <td colspan="2">
                                               <select
-                                              class="form-control w-100 selectdua"
+                                              class="form-control w-100 selectduavariant"
                                               :class="'rowvariant' + index"
                                               x-model="row.variant_id" x-on:change="setItemDetail(index)"
                                               style="display: none;"
                                               >
-                                                <option>- Select Variant -</option>
+                                                <option></option>
 
                                                 <template x-for="variant in row.variants" :key="variant">
                                                   <option x-text="variant.name" x-model="variant.id"></option>
@@ -94,12 +94,12 @@
                                           </td>
                                           <td colspan="2">
                                               <select
-                                              class="form-control w-100 selectdua"
+                                              class="form-control w-100 selectduasize"
                                               :class="'rowsize' + index"
                                               x-model="row.size_id" x-on:change="setItemDetail(index)"
                                               style="display: none;"
                                               >
-                                                  <option>- Size select -</option>
+                                                  <option></option>
 
                                                   <template x-for="size in row.sizes" :key="size.id">
                                                     <option x-text="size.name" x-model="size.id"></option>
@@ -220,7 +220,16 @@
           total: 0,
 
           initSelect() {
-            $('.selectdua').select2({
+            $('.selectduaitem').select2({
+              placeholder: "Select Item",
+              theme: 'bootstrap4',
+            });
+            $('.selectduavariant').select2({
+              placeholder: "Select Variant",
+              theme: 'bootstrap4',
+            });
+            $('.selectduasize').select2({
+              placeholder: "Select Size",
               theme: 'bootstrap4',
             });
 

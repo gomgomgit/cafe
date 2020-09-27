@@ -50,8 +50,16 @@
       <div class="col-xl-12">
           <div class="card">
               <div class="card-header">
-                  <h5>Basic Table</h5>
-                  <span class="d-block m-t-5">use class <code>table</code> inside table element</span>
+                  {{-- <h5>Basic Table</h5>
+                  <span class="d-block m-t-5">use class <code>table</code> inside table element</span> --}}
+                  <div class="d-flex justify-content-between">
+                      <div class="text-left">
+                        <a class="btn btn-info" href="{{ route('admin.orders.create') }}"><i class="feather icon-plus"></i> Add</a>
+                      </div>
+                      {{-- <div class="text-right">
+                        <a class="btn btn-danger" href="{{ route('admin.orders.trash') }}"><i class="feather icon-trash"></i> Trash</a>
+                      </div> --}}
+                  </div>
               </div>
               <div class="card-block table-border-style">
                   <div class="table-responsive overflow-hidden">
@@ -68,10 +76,6 @@
                           </thead>
                       </table>
                       <hr>
-
-                      <div class="text-right">
-                        <a class="btn btn-danger" href="{{ route('admin.categories.trash') }}"><i class="feather icon-trash"></i> Trash</a>
-                      </div>
 
                   </div>
               </div>

@@ -27,7 +27,7 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('name', 'password');
-        $isSuccess = Auth::attempt($credentials);
+        $isSuccess = Auth::attempt($credentials, $request->remember);
 
         if ($isSuccess) {
             return redirect()->intended('/admin/dashboard');

@@ -126,7 +126,7 @@ $menus = [
 <nav class="pcoded-navbar">
     <div class="navbar-wrapper">
         <div class="navbar-brand header-logo">
-            <a href="index.html" class="b-brand">
+            <a href="#" class="b-brand">
                 <div class="b-bg">
                     <i class="feather icon-trending-up"></i>
                 </div>
@@ -134,8 +134,35 @@ $menus = [
             </a>
             <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
         </div>
+
+
         <div class="navbar-content scroll-div">
             <ul class="nav pcoded-inner-navbar">
+                <li class="nav-item pcoded-menu-caption">
+                    <label>User</label>
+                </li>
+
+                <li>
+                    <div class="">
+                        <div class="pro-head px-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <img src="{{ asset('dattalite/assets/images/user/avatar-1.jpg') }}" class="img-radius mr-2" alt="User-Profile-Image" style="width: 50px">
+                                <span>
+                                    <a href="{{ route('admin.users.show', auth()->user()->id) }}" class="text-white">
+                                        {{ auth()->user()->name }}
+                                    </a>
+                                </span>
+                            </div>
+                            <form action="{{ route('admin.logout') }}" method="post" class="d-inline-block ">
+                                @csrf
+                                <button class="" style="border: none; cursor: pointer; background: none">
+                                    <i class="feather icon-log-out text-white" style="font-size: 18px; color: #a9b7d0"></i>
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+                </li>
                 <li class="nav-item pcoded-menu-caption">
                     <label>Navigation</label>
                 </li>

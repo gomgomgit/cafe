@@ -65,13 +65,13 @@
                                           <th scope="row" class="h5"><span x-text="index + 1"></span></th>
                                           <td colspan="2">
                                             <select
-                                              class="form-control w-100 selectdua"
+                                              class="form-control w-100 selectduaitem"
                                               :class="'rowitem' + index"
                                               x-model="row.item_id"
-                                              x-on:change="setDetail(row.item_id, index)"
+                                              {{-- x-on:change="setDetail(row.item_id, index)" --}}
                                               style="display: none"
                                             >
-                                              <option>-Select Item-</option>
+                                              <option></option>
                                               @foreach($items as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                               @endforeach
@@ -80,12 +80,13 @@
                                           </td>
                                           <td colspan="2">
                                               <select
-                                              class="form-control w-100 selectdua"
+                                              class="form-control w-100 selectduavariant"
                                               :class="'rowvariant' + index"
-                                              x-model="row.variant_id" x-on:change="setItemDetail(index)"
+                                              x-model="row.variant_id"
+                                              {{-- x-on:change="setItemDetail(index)" --}}
                                               style="display: none"
                                               >
-                                                <option>- Select Variant -</option>
+                                                <option></option>
 
                                                 <template x-for="variant in row.variants" :key="variant">
                                                   <option x-text="variant.name" x-model="variant.id" :selected="variant.id === row.variant_id"></option>
@@ -95,12 +96,13 @@
                                           </td>
                                           <td colspan="2">
                                               <select
-                                              class="form-control w-100 selectdua"
-                                              :class="'rowitem' + index"
-                                              x-model="row.size_id" x-on:change="setItemDetail(index)"
+                                              class="form-control w-100 selectduasize"
+                                              :class="'rowsize' + index"
+                                              x-model="row.size_id"
+                                              {{-- x-on:change="setItemDetail(index)" --}}
                                               style="display: none"
                                               >
-                                                  <option>- Size select -</option>
+                                                  <option></option>
 
                                                   <template x-for="size in row.sizes" :key="size.id">
                                                     <option x-text="size.name" x-model="size.id" :selected="size.id === row.size_id"></option>
@@ -217,8 +219,12 @@
               rows[i].item_id = idet.item_id;
 
               let detail = item && details.filter(detail => detail.item_id == idet.item_id);
-              const variant = detail && detail.map(d => d.variant);
-              const size = detail && detail.map(d => d.size);
+              const nvariant = detail && detail.map(d => d.variant);
+              const variant = nvariant && nvariant.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i)
+
+              const nsize = detail && detail.map(d => d.size);
+              const size = nsize && nsize.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i);
+
 
               rows[i].variants = variant;
               rows[i].sizes = size;
@@ -237,16 +243,25 @@
 
 
           initSelect() {
-            $('.selectdua').select2({
+            $('.selectduaitem').select2({
+              placeholder: 'Select Item',
+              theme: 'bootstrap4',
+            });
+            $('.selectduavariant').select2({
+              placeholder: 'Select Variant',
+              theme: 'bootstrap4',
+            });
+            $('.selectduasize').select2({
+              placeholder: 'Select Size',
               theme: 'bootstrap4',
             });
 
             this.rows.forEach((row, index) => {
+              // console.log('haha');
               $('.rowitem'+index).on('select2:select', e => {
                 row.item_id = e.target.value;
                 this.setDetail(row.item_id, index);
               });
-              console.log('haha');
               $('.rowvariant'+index).on('select2:select', e => {
                 row.variant_id = e.target.value;
                 this.setItemDetail(index);
@@ -263,9 +278,12 @@
           setDetail(id, index) {
             const item = items.find(item => item.id == id);
             let detail = item && details.filter(detail => detail.item_id == id);
-            const variant = detail && detail.map(d => d.variant);
+            const nvariant = detail && detail.map(d => d.variant);
+            const variant = nvariant && nvariant.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i)
             // const variantName = detail && new Set(detail.map(d => d.variant.name));
-            const size = detail && detail.map(d => d.size);
+            // const size = detail && detail.map(d=>d.pluck('size'));
+            const nsize = detail && detail.map(d => d.size);
+            const size = nsize && nsize.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i);
 
             // this.itemdetails = detail;
             this.rows[index].variants = variant;
@@ -274,7 +292,8 @@
             this.rows[index].sizes = size;
 
             this.setItemDetail(index);
-            this.initSelect();
+            // this.initSelect();
+              console.log(this.rows[index]);
           },
 
           setItemDetail(index) {
@@ -285,6 +304,9 @@
 
             row.detail = detailId;
             row.price = price;
+
+            // console.log(row);
+
             this.setSubtotal(index);
           },
 
@@ -297,7 +319,8 @@
 
               this.setTotal();
             }
-            // console.log(row.qty);
+            this.initSelect();
+            console.log(row);
 
           },
 

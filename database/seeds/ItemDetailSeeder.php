@@ -27,7 +27,7 @@ class ItemDetailSeeder extends Seeder
                     'price' => 10000 * $j + $i,
                 ]);
 
-                $detailId->ingredients()->sync([1 => ["amount_ingredient" => 7], 2 => ["amount_ingredient" => 120]]);
+                $detailId->ingredients()->sync([2 => ["amount_ingredient" => 7], 3 => ["amount_ingredient" => 120]]);
             }
 
         }

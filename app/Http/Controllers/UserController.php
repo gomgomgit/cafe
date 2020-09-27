@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Order;
 use App\Model\User;
 use DataTables;
 use Illuminate\Http\Request;
@@ -90,6 +91,10 @@ class UserController extends Controller
     {
         $model = $this->model->find($id);
         $this->authorize('delete', $model);
+
+        Order::where('user_id', $id)->update([
+            'user_id' => 1,
+        ]);
 
         $model->delete();
         return redirect($this->redirect);

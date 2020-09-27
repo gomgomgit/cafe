@@ -1,5 +1,5 @@
 
-    <header class="navbar pcoded-header navbar-expand-lg navbar-light">
+    {{-- <header class="navbar pcoded-header navbar-expand-lg navbar-light">
         <div class="m-header">
             <a class="mobile-menu" id="mobile-collapse1" href="javascript:"><span></span></a>
             <a href="index.html" class="b-brand">
@@ -118,4 +118,4 @@
                 </li>
             </ul>
         </div>
-    </header>
+    </header> --}}

@@ -97,7 +97,7 @@
                                       @foreach($sizes as $key => $size)
                                         <li><input type="checkbox" name="sizes[]" id="size{{ $key }}"
                                         value="{{ $size->id }}"
-                                        @if(is_array(old('sizes')) && in_array($variant->id, old('sizes'))) checked @endif
+                                        @if(is_array(old('sizes')) && in_array($size->id, old('sizes'))) checked @endif
                                         >
                                         <label for="size{{ $key }}">{{ $size->name }}</label></li>
                                       @endforeach
@@ -118,7 +118,7 @@
                                       @foreach($ingredients as $key => $ingredient)
                                         <li><input type="checkbox" name="ingredients[]" id="ingredient{{ $key }}"
                                         value="{{ $ingredient->id }}"
-                                        @if(is_array(old('ingredients')) && in_array($variant->id, old('ingredients'))) checked @endif
+                                        @if(is_array(old('ingredients')) && in_array($ingredient->id, old('ingredients'))) checked @endif
                                         >
                                         <label for="ingredient{{ $key }}">{{ $ingredient->name }}</label></li>
                                       @endforeach

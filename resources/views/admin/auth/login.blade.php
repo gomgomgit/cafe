@@ -72,8 +72,8 @@
 
                         <div class="form-group text-left">
                             <div class="checkbox checkbox-fill d-inline">
-                                <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
-                                <label for="checkbox-fill-a1" class="cr"> Save Details</label>
+                                <input type="checkbox" name="remember" id="checkbox-fill-a1" checked="">
+                                <label for="checkbox-fill-a1" class="cr"> Remember Me</label>
                             </div>
                         </div>
                         <button class="btn btn-primary shadow-2 mb-4">Login</button>

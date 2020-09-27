@@ -19,6 +19,7 @@ class CreateItemDetailsTable extends Migration
             $table->foreignId('variant_id');
             $table->foreignId('size_id');
             $table->integer('price');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -49,6 +49,9 @@ class OrderController extends Controller
                 ->editColumn('created_at', function (Order $order) {
                     return date('l d-M-Y', strtotime($order->created_at));
                 })
+                ->editColumn('total', function (Order $order) {
+                    return 'Rp. ' . $order->total;
+                })
                 ->make(true);
         }
 
@@ -153,10 +156,12 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->itemdetail);
         $order = $this->model->find($id);
 
         foreach ($order->orderDetails as $key => $orderDetail) {
-            $detail = ItemDetail::with('ingredients')->find($orderDetail->item_detail_id);
+            $detail = ItemDetail::with('ingredients')->withTrashed()->findOrFail($orderDetail->item_detail_id);
+            // dd($detail);
             foreach ($detail->ingredients as $key => $ingredient) {
                 $usedIngredient = Ingredient::find($ingredient->id);
                 $stock = $ingredient->stock;

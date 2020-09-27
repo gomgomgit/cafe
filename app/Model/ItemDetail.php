@@ -4,16 +4,18 @@ namespace App\Model;
 
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ItemDetail extends Model implements Buyable
 {
+    use SoftDeletes;
     protected $fillable = [
         'item_id', 'variant_id', 'size_id', 'price',
     ];
 
     public function item()
     {
-        return $this->belongsTo('App\Model\Item');
+        return $this->belongsTo('App\Model\Item')->withTrashed();
     }
 
     public function variant()

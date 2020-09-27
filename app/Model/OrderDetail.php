@@ -12,6 +12,6 @@ class OrderDetail extends Model
 
     public function itemDetail()
     {
-        return $this->belongsTo('App\Model\ItemDetail');
+        return $this->belongsTo('App\Model\ItemDetail')->withTrashed();
     }
 }

@@ -43,7 +43,7 @@
                                   <th>Price</th>
                                   <th>Qty</th>
                                   <th>Subtotal</th>
-                                  <th></th>
+                                  {{-- <th></th> --}}
                               </tr>
                           </thead>
                           <tbody>
@@ -53,10 +53,10 @@
                                   <th scope="row">{{ $no++ }}</th>
                                   <td>{{ $detail->itemDetail->item->name }}</td>
                                   <td>{{ $detail->itemDetail->variant->name .', '. $detail->itemDetail->size->name}}</td>
-                                  <td>{{ $price = $detail->itemDetail->price }}</td>
+                                  <td>Rp. {{ $price = $detail->itemDetail->price }}</td>
                                   <td>{{ $detail->qty }}</td>
-                                  <td>{{ $st = $detail->qty * $price}}</td>
-                                  <td><a href="{{ route('admin.items.index') }}"><i class="feather icon-edit"></i></a></td>
+                                  <td>Rp. {{ $st = $detail->qty * $price}}</td>
+                                  {{-- <td><a href="{{ route('admin.items.index') }}"><i class="feather icon-edit"></i></a></td> --}}
                               </tr>
                               @php $total += $st @endphp
                               @endforeach
@@ -64,7 +64,7 @@
                                 <td></td>
                                 <td colspan="4" class="font-weight-bold h5 text-dark">Total</td>
                                 <td class="font-weight-bold h5 text-dark">Rp.{{ $total }}</td>
-                                <td></td>
+                                {{-- <td></td> --}}
                               </tr>
                           </tbody>
                       </table>
