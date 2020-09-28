@@ -38,6 +38,14 @@ $monthIncome = App\Model\Order::whereMonth('created_at', $month)->pluck('total')
 $lmonthIncome = App\Model\Order::whereMonth('created_at', $lmonth)->pluck('total')->sum();
 {{-- dd($yearIncome); --}}
 {{-- dd($month); --}}
+
+for ($i=0; $i <= 4; $i++) { 
+    $listmonth[] = Carbon\Carbon::now()->subMonths($i)->format('F'); 
+    $formatmonth = Carbon\Carbon::now()->subMonths($i)->format('m');
+    $listmonthIncome[] = App\Model\Order::whereMonth('created_at', $formatmonth)->pluck('total')->sum();
+
+    {{-- $listmonthOrder[] = 'Rp. ' . App\Model\OrderDetail::whereMonth('created_at', $formatmonth)->pluck('qty')->sum(); --}}
+};
 ?>
 @extends('admin.layouts.app')
 
@@ -206,15 +214,26 @@ $lmonthIncome = App\Model\Order::whereMonth('created_at', $lmonth)->pluck('total
                             </div>
                             <!-- [ statistics year chart ] end -->
                             <!--[social-media section] start-->
-                            <div class="col-md-12 col-xl-12">
+                            <div class="col-md-12 col-xl-4">
 
                               <div class="card">
                                   <div class="card-header">
                                       <h5>Sale Chart</h5>
                                   </div>
                                   <div class="card-block">
-                                      <canvas id="myChart" width="100"></canvas>
+                                      <div id="chartItem" style="height: 600px;"></div>
+                                  </div>
+                              </div>
 
+                            </div>
+                            <div class="col-md-12 col-xl-8">
+
+                              <div class="card">
+                                  <div class="card-header">
+                                      <h5>Sale Chart</h5>
+                                  </div>
+                                  <div class="card-block">
+                                      <div id="chartIncome" style="height: 600px;"></div>
                                   </div>
                               </div>
 
@@ -236,30 +255,66 @@ $lmonthIncome = App\Model\Order::whereMonth('created_at', $lmonth)->pluck('total
     {{-- ChartJs --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
+        <!-- Chartisan -->
+    <script src="https://unpkg.com/@chartisan/chartjs@^2.1.0/dist/chartisan_chartjs.umd.js"></script>
+
 <script type="text/javascript">
-  var ctx = document.getElementById('myChart');
-  var myChart = new Chart(ctx, {
-      type: 'bar',
-          data: {
-              labels: @json($itemName),
-              datasets: [{
-                  label: 'Ordered',
-                  data: @json($itemOrdered),
-                  backgroundColor: '#6A2B05',
-                  // borderColor: '#4A1B03',
-                  // borderWidth: 5
-              }]
-          },
-          options: {
-              scales: {
-                  yAxes: [{
-                      ticks: {
-                          beginAtZero: true
-                      }
-                  }]
-              }
-          }
-  });
+  // var ctx = document.getElementById('myChart');
+  // var myChart = new Chart(ctx, {
+  //     type: 'bar',
+  //         data: {
+  //             labels: @json($itemName),
+  //             datasets: [{
+  //                 label: 'Ordered',
+  //                 data: @json($itemOrdered),
+  //                 backgroundColor: '#6A2B05',
+  //                 // borderColor: '#4A1B03',
+  //                 // borderWidth: 5
+  //             }]
+  //         },
+  //         options: {
+  //             scales: {
+  //                 yAxes: [{
+  //                     ticks: {
+  //                         beginAtZero: true
+  //                     }
+  //                 }]
+  //             }
+  //         }
+  // });
+  const dataincome = {
+    chart: { labels: @json($listmonth) },
+    datasets: [
+      { name: 'Income', values: @json($listmonthIncome), extra: 'Rp. ' },
+      // { name: 'Item Ordered', values: @json($listmonthIncome) },
+    ],
+  }
+  const dataitem = {
+    chart: { labels: @json($itemName) },
+    datasets: [
+      { name: 'Income', values: @json($itemOrdered) },
+    ],
+  }
+const chart = new Chartisan({
+  el: '#chartIncome',
+  data: dataincome,
+  hooks: new ChartisanHooks()
+    .colors(['#1DC6E6', '#4299E1'])
+    .responsive()
+    .beginAtZero()
+    .legend({ position: 'bottom' })
+    .title('Income for the last 5 months')
+    .datasets(['bar']),
+})
+
+const chart2 = new Chartisan({
+  el: '#chartItem',
+  data: dataitem,
+  hooks: new ChartisanHooks()
+    .datasets('doughnut')
+    .pieColors()
+    .title('Item Ordered (' + @json($items->pluck('ordered')->collapse()->sum('qty')) + ')')
+})
 </script>
 
 @endsection

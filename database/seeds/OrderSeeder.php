@@ -20,7 +20,7 @@ class OrderSeeder extends Seeder
             Order::create([
                 'user_id' => rand(4, 15),
                 'customer' => 'Customer ' . $i,
-                'created_at' => $dt->subMonths(3 * $i),
+                'created_at' => $dt->subMonths($i),
             ]);
         }
     }

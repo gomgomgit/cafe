@@ -13,10 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
  */
 Route::get('/', 'HomeController@index')->name('index');
+Route::get('/category/{id}', 'HomeController@category')->name('category');
 Route::get('/shop', 'HomeController@shop')->name('shop');
 Route::get('/show/{id}', 'HomeController@show')->name('show');
 Route::post('/add-cart', 'HomeController@addCart')->name('addCart');
 Route::get('/cart', 'HomeController@cart')->name('cart');
+Route::post('/order', 'HomeController@order')->name('order');
 Route::get('/destroy-cart', 'HomeController@destroyCart')->name('destroyCart');
 
 Route::prefix('/admin')->name('admin.')->group(function () {

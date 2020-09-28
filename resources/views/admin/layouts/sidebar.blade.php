@@ -126,11 +126,11 @@ $menus = [
 <nav class="pcoded-navbar">
     <div class="navbar-wrapper">
         <div class="navbar-brand header-logo">
-            <a href="#" class="b-brand">
+            <a href="{{ route('index') }}" class="b-brand">
                 <div class="b-bg">
                     <i class="feather icon-trending-up"></i>
                 </div>
-                <span class="b-title">Datta Able</span>
+                <span class="b-title">Kapesop</span>
             </a>
             <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
         </div>

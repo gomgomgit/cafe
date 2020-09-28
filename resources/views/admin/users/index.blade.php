@@ -60,7 +60,8 @@
                               <tr>
                                   <th>No</th>
                                   <th>Name</th>
-                                  <th>Phone</th>
+                                  {{-- <th>Phone</th> --}}
+                                  <th>Role</th>
                                   <th>Action</th>
                               </tr>
                           </thead>
@@ -110,7 +111,8 @@
 				columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false},
 					{data: 'name', name: 'name'},
-          {data: 'phone', name: 'phone'},
+          // {data: 'phone', name: 'phone'},
+          {data: 'role', name: 'role'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 				],
 			});

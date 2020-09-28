@@ -19,7 +19,7 @@ $s = new App\Model\Size;
 	<!-- meta character set -->
 	<meta charset="UTF-8">
 	<!-- Site Title -->
-	<title>Karma Shop</title>
+    <title>KapeSop</title>
 	<!--
 			CSS
 			============================================= -->

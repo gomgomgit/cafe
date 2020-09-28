@@ -60,13 +60,6 @@
 </head>
 
 <body id="category">
-	<div class="ordermes">
-		<div>
-			<p class="ordercustomer">{{ session('customer') }}</p>
-			<p class="order">{{ session('order') }}</p>
-			<p class="mess">Mohon Tunggu di Ruang Tunggu</p>
-		</div>
-	</div>
 
 	<!-- Start Header Area -->
 	{{-- <header class="header_area sticky-header">
@@ -155,29 +148,11 @@
 	<!-- End Banner Area -->
 	<div class="container" x-data="shoppine()">
 		<div class="row">
-			<div class="col-xl-3 col-lg-4 col-md-5 pt-5">
-				<div class="sidebar-categories mt-5">
-					<div class="py-3 mb-1 text-white font-weight-bold pl-2">Categories</div>
-					<ul class="">
-						{{-- @foreach($categories as $category)
-							<li class="main-nav-list">
-								<a href="#">{{ $category->name }}<span class="number">{{ $category->itemCount() }}</span></a>
-							</li>
-						@endforeach --}}
-						<template x-for="category in categories" :key="category">
-							<li class="main-nav-list">
-								<a class="text-white font-weight-bold lcategory" :href="'/category/'+category.id"><span class="nlcate" x-text="category.name"></span>
-									<span class="number"> (<span x-text="category.items_count"></span>)</span>
-								</a>
-							</li>
-						</template>
-					</ul>
-				</div>
-			</div>
-			<div class="col-xl-9 col-lg-8 col-md-7 py-4">
+			<div class="col-xl-12 py-4">
 				<!-- Start Filter Bar -->
 				<div class="d-flex justify-between">
-					<h2 class="text-light font-weight-bold w-50 align-items-center py-4 ml-4">Item</h2>
+
+					<h2 class="text-light font-weight-bold w-50 align-items-center py-4 ml-4">{{ $data->name }}</h2>
 
 					<div class="search-bar">
 						<input type="text" name="search" pattern=".*\S.*" x-model="search" required>
@@ -291,6 +266,223 @@
 		</div>
 	</div>
 
+	<!-- Start related-product Area -->
+	{{-- <section class="related-product-area section_gap">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Deals of the Week</h1>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+							magna aliqua.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-9">
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r1.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r2.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r3.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r5.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r6.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r7.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r9.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r10.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="{{ asset('karma/img/r11.jpg') }}" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="ctg-right">
+						<a href="#" target="_blank">
+							<img class="img-fluid d-block mx-auto" src="{{ asset('karma/img/category/c5.jpg') }}" alt="">
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section> --}}
+	<!-- End related-product Area -->
+
+	<!-- start footer Area -->
+	{{-- <footer class="footer-area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3  col-md-6 col-sm-6">
+					<div class="single-footer-widget">
+						<h6>About Us</h6>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore dolore
+							magna aliqua.
+						</p>
+					</div>
+				</div>
+				<div class="col-lg-4  col-md-6 col-sm-6">
+					<div class="single-footer-widget">
+						<h6>Newsletter</h6>
+						<p>Stay update with our latest</p>
+						<div class="" id="mc_embed_signup">
+
+							<form target="_blank" novalidate="true" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+							 method="get" class="form-inline">
+
+								<div class="d-flex flex-row">
+
+									<input class="form-control" name="EMAIL" placeholder="Enter Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email '"
+									 required="" type="email">
+
+
+									<button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+									<div style="position: absolute; left: -5000px;">
+										<input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
+									</div>
+
+									<!-- <div class="col-lg-4 col-md-4">
+													<button class="bb-btn btn"><span class="lnr lnr-arrow-right"></span></button>
+												</div>  -->
+								</div>
+								<div class="info"></div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3  col-md-6 col-sm-6">
+					<div class="single-footer-widget mail-chimp">
+						<h6 class="mb-20">Instragram Feed</h6>
+						<ul class="instafeed d-flex flex-wrap">
+							<li><img src="{{ asset('karma/img/i1.jpg') }}" alt=""></li>
+							<li><img src="{{ asset('karma/img/i2.jpg') }}" alt=""></li>
+							<li><img src="{{ asset('karma/img/i3.jpg') }}" alt=""></li>
+							<li><img src="{{ asset('karma/img/i4.jpg') }}" alt=""></li>
+							<li><img src="{{ asset('karma/img/i5.jpg') }}" alt=""></li>
+							<li><img src="{{ asset('karma/img/i6.jpg') }}" alt=""></li>
+							<li><img src="{{ asset('karma/img/i7.jpg') }}" alt=""></li>
+							<li><img src="{{ asset('karma/img/i8.jpg') }}" alt=""></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-2 col-md-6 col-sm-6">
+					<div class="single-footer-widget">
+						<h6>Follow Us</h6>
+						<p>Let us be social</p>
+						<div class="footer-social d-flex align-items-center">
+							<a href="#"><i class="fa fa-facebook"></i></a>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+							<a href="#"><i class="fa fa-dribbble"></i></a>
+							<a href="#"><i class="fa fa-behance"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
+				<p class="footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+</p>
+			</div>
+		</div>
+	</footer> --}}
+	<!-- End footer Area -->
+
 
 
 	<script src="{{asset('karma/js/vendor/jquery-2.2.4.min.js')}}"></script>
@@ -313,7 +505,6 @@
 	<script type="text/javascript">
 		function shoppine() {
 			return {
-				categories : @json($categories),
 				items : @json($items),
 				search : "",
 
@@ -329,18 +520,6 @@
 	          },
 			}
 		}
-
-	</script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			const ordermes = @json(session('order'));
-			if (ordermes) {
-				$('.ordermes').show()
-			};
-			setTimeout(function(){
-				$('.ordermes').hide()
-			},3000)
-		})
 
 	</script>
 </body>

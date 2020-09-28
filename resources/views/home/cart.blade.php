@@ -15,7 +15,7 @@
     <!-- meta character set -->
     <meta charset="UTF-8">
     <!-- Site Title -->
-    <title>Karma Shop</title>
+    <title>KapeSop</title>
 
     <!--
             CSS
@@ -40,229 +40,176 @@
 
 <body>
 
-    <!-- Start Header Area -->
-	{{-- <header class="header_area sticky-header">
-		<div class="main_menu">
-			<nav class="navbar navbar-expand-lg navbar-light main_box">
-				<div class="container">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<a class="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt=""></a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
-						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-							<li class="nav-item submenu dropdown active">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Shop</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
-									<li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>
-									<li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
-									<li class="nav-item active"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
-									<li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
-								</ul>
-							</li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Blog</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-									<li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
-								</ul>
-							</li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Pages</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
-									<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
-								</ul>
-							</li>
-							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
-							<li class="nav-item">
-								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-		</div>
-		<div class="search_input" id="search_input_box">
-			<div class="container">
-				<form class="d-flex justify-content-between">
-					<input type="text" class="form-control" id="search_input" placeholder="Search Here">
-					<button type="submit" class="btn"></button>
-					<span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
-				</form>
-			</div>
-		</div>
-	</header> --}}
-	<!-- End Header Area -->
-
-    <!-- Start Banner Area -->
-    {{-- <section class="banner-area organic-breadcrumb">
-        <div class="container">
-            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-                <div class="col-first">
-                    <h1>Shopping Cart</h1>
-                    <nav class="d-flex align-items-center">
-                        <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-                        <a href="category.html">Cart</a>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    <!-- End Banner Area -->
-
     <!--================Cart Area =================-->
     <section class="cart_area">
         <div class="container">
             <div class="cart_inner">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-white nml">Product</th>
-                                <th scope="col" class="text-white nml">Variant</th>
-                                <th scope="col" class="text-white nml">Price</th>
-                                <th scope="col" class="text-white nml">Quantity</th>
-                                <th scope="col" class="text-white nml">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <form action="{{ route('order') }}" method="post">
+                    @csrf
 
-                            @foreach($carts as $cart)
-
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="d-flex">
-                                            <img src="{{ asset('karma/img/cart.jpg') }}" alt="">
-                                        </div>
-                                        <div class="media-body">
-                                            <p>{{$cart->name}}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p>{{ $cart->variant }}</p>
-                                </td>
-                                <td>
-                                    <p>{{ $cart->price }}</p>
-                                </td>
-                                <td>
-                                    <p>{{ $cart->qty }}</p>
-                                    {{-- <div class="product_count">
-                                        <input type="text" name="qty" id="sst" maxlength="12" value="{{ $cart->qty }}" title="Quantity:"
-                                            class="input-text qty">
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                                    </div> --}}
-                                </td>
-                                <td>
-                                    <h5 class="text-white">{{ $cart->subtotal() }}</h5>
-                                </td>
-                            </tr>
-
+                    <div class="col-12 form-group p_star">
+                        {{-- <p>Cashier : {{ Auth()->user()->name }}</p> --}}
+                        @if($errors->any())
+                            <ul>
+                            @foreach($errors->all() as $error)
+                            <li class="text-danger"><i class="fa fa-exclamation-triangle"></i> {{ $error }}</li>
                             @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                    <div class="col-12 form-group p_star">
+                        <label class="text-white font-weight-bold" for="name">Name : </label>
+                            <input type="text" class="form-control" id="name" name="customer">
+                            <input type="hidden" name="item" value="{{ $carts->count() }}">
+                            {{-- <p>{{ isset($carts[0]) }}</p> --}}
+                        {{-- <span class="placeholder" data-placeholder="Username or Email"></span> --}}
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-white nml">Product</th>
+                                    <th scope="col" class="text-white nml">Variant</th>
+                                    <th scope="col" class="text-white nml">Size</th>
+                                    <th scope="col" class="text-white nml">Price</th>
+                                    <th scope="col" class="text-white nml">Quantity</th>
+                                    <th scope="col" class="text-white nml">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                            {{-- <tr class="bottom_button">
-                                <td>
-                                    <a class="gray_btn" href="#">Update Cart</a>
-                                </td>
-                                <td>
+                                @foreach($carts as $cart)
 
-                                </td>
-                                <td>
+                                <tr>
+                                    <td>
+                                        <div class="media">
+                                            <div class="d-flex">
+                                                <img src="{{ asset('image/'.$cart->model->item->image) }}" alt="" height="100px;">
+                                            </div>
+                                            <div class="media-body">
+                                                <p>{{$cart->name}}</p>
+                                                <input type="hidden" name="itemdetail[]" value="{{ $cart->id }}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p>{{ $cart->model->variant->name }}</p>
+                                    </td>
+                                    <td>
+                                        <p>{{ $cart->model->size->name }}</p>
+                                    </td>
+                                    <td>
+                                        <p>{{ $cart->price }}</p>
+                                    </td>
+                                    <td>
+                                        <p>{{ $cart->qty }}</p>
+                                        <input type="hidden" name="qty[]" value="{{ $cart->qty }}">
+                                        {{-- <div class="product_count">
+                                            <input type="text" name="qty" id="sst" maxlength="12" value="{{ $cart->qty }}" title="Quantity:"
+                                                class="input-text qty">
+                                            <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                                class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                            <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                                class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                        </div> --}}
+                                    </td>
+                                    <td>
+                                        <h4 class="text-white">Rp. {{ $cart->subtotal(0, '', '') }}</h4>
+                                        <input type="hidden" name="subtotal[]" value="{{ $cart->subtotal(0, '', '') }}">
+                                    </td>
+                                </tr>
 
-                                </td>
-                                <td>
+                                @endforeach
 
-                                </td>
-                                <td>
-                                    {{-- <div class="cupon_text d-flex align-items-center">
-                                        <input type="text" placeholder="Coupon Code">
-                                        <a class="primary-btn" href="#">Apply</a>
-                                        <a class="gray_btn" href="#">Close Coupon</a>
-                                    </div> --}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a class="gray_btn" href="{{ route('destroyCart') }}">Delete All Cart</a>
-                                </td>
-                                <td>
+                                {{-- <tr class="bottom_button">
+                                    <td>
+                                        <a class="gray_btn" href="#">Update Cart</a>
+                                    </td>
+                                    <td>
 
-                                </td>
-                                <td>
+                                    </td>
+                                    <td>
 
-                                </td>
-                                <td>
-                                    <h5 class="text-white">Subtotal</h5>
-                                </td>
-                                <td>
-                                    <h5 class="text-white h3">{{ Cart::subtotal() }}</h5>
-                                </td>
-                            </tr>
-                            {{-- <tr class="shipping_area">
-                                <td>
+                                    </td>
+                                    <td>
 
-                                </td>
-                                <td>
+                                    </td>
+                                    <td>
+                                        {{-- <div class="cupon_text d-flex align-items-center">
+                                            <input type="text" placeholder="Coupon Code">
+                                            <a class="primary-btn" href="#">Apply</a>
+                                            <a class="gray_btn" href="#">Close Coupon</a>
+                                        </div> --}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="gray_btn" href="{{ route('destroyCart') }}">Delete All Cart</a>
+                                    </td>
+                                    <td>
 
-                                </td>
-                                <td>
-                                    <h5>Shipping</h5>
-                                </td>
-                                <td>
-                                    <div class="shipping_box">
-                                        <ul class="list">
-                                            <li><a href="#">Flat Rate: $5.00</a></li>
-                                            <li><a href="#">Free Shipping</a></li>
-                                            <li><a href="#">Flat Rate: $10.00</a></li>
-                                            <li class="active"><a href="#">Local Delivery: $2.00</a></li>
-                                        </ul>
-                                        <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
-                                        <select class="shipping_select">
-                                            <option value="1">Bangladesh</option>
-                                            <option value="2">India</option>
-                                            <option value="4">Pakistan</option>
-                                        </select>
-                                        <select class="shipping_select">
-                                            <option value="1">Select a State</option>
-                                            <option value="2">Select a State</option>
-                                            <option value="4">Select a State</option>
-                                        </select>
-                                        <input type="text" placeholder="Postcode/Zipcode">
-                                        <a class="gray_btn" href="#">Update Details</a>
-                                    </div>
-                                </td>
-                            </tr> --}}
-                            <tr class="out_button_area">
-                                <td></td>
-                                <td colspan="4">
-                                    <div class="checkout_btn_inner d-flex align-items-center justify-content-end">
-                                        <a class="gray_btn mr-3" href="#">Continue Shopping</a>
-                                        <a class="primary-btn" href="#">Proceed to checkout</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <h5 class="text-white">Total</h5>
+                                    </td>
+                                    <td>
+                                        <h5 class="text-white h3">Rp. {{ Cart::subtotal() }}</h5>
+                                        <input type="hidden" name="total" value="{{ Cart::subtotal(0, '', '') }}">
+                                    </td>
+                                </tr>
+                                {{-- <tr class="shipping_area">
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <h5>Shipping</h5>
+                                    </td>
+                                    <td>
+                                        <div class="shipping_box">
+                                            <ul class="list">
+                                                <li><a href="#">Flat Rate: $5.00</a></li>
+                                                <li><a href="#">Free Shipping</a></li>
+                                                <li><a href="#">Flat Rate: $10.00</a></li>
+                                                <li class="active"><a href="#">Local Delivery: $2.00</a></li>
+                                            </ul>
+                                            <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
+                                            <select class="shipping_select">
+                                                <option value="1">Bangladesh</option>
+                                                <option value="2">India</option>
+                                                <option value="4">Pakistan</option>
+                                            </select>
+                                            <select class="shipping_select">
+                                                <option value="1">Select a State</option>
+                                                <option value="2">Select a State</option>
+                                                <option value="4">Select a State</option>
+                                            </select>
+                                            <input type="text" placeholder="Postcode/Zipcode">
+                                            <a class="gray_btn" href="#">Update Details</a>
+                                        </div>
+                                    </td>
+                                </tr> --}}
+                                <tr class="out_button_area">
+                                    <td></td>
+                                    <td colspan="5">
+                                        <div class="checkout_btn_inner d-flex align-items-center justify-content-end">
+                                            <a class="gray_btn mr-3" href="{{ route('index') }}">Continue Order</a>
+                                            <button class="primary-btn rounded" href="#">Proceed Order</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
