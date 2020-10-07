@@ -224,6 +224,7 @@
               placeholder: "Select Item",
               theme: 'bootstrap4',
             });
+              console.log($('.selectduaitem').find(':selected'));
             $('.selectduavariant').select2({
               placeholder: "Select Variant",
               theme: 'bootstrap4',
@@ -237,6 +238,8 @@
               $('.rowitem'+index).on('select2:select', e => {
                 row.item_id = e.target.value;
                 this.setDetail(row.item_id, index);
+                // console.log(e.params.data);
+                // e.target.attr("disabled", true);
               });
               $('.rowvariant'+index).on('select2:select', e => {
                 row.variant_id = e.target.value;

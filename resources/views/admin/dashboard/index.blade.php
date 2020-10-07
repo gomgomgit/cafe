@@ -314,6 +314,7 @@ const chart2 = new Chartisan({
     .datasets('doughnut')
     .pieColors()
     .title('Item Ordered (' + @json($items->pluck('ordered')->collapse()->sum('qty')) + ')')
+    .legend({position:'bottom'})
 })
 </script>
 

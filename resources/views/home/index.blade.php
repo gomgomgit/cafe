@@ -177,7 +177,7 @@
 			<div class="col-xl-9 col-lg-8 col-md-7 py-4">
 				<!-- Start Filter Bar -->
 				<div class="d-flex justify-between">
-					<h2 class="text-light font-weight-bold w-50 align-items-center py-4 ml-4">Item</h2>
+					<h2 class="text-light font-weight-bold w-50 align-items-center py-4 ml-4">Kapesop</h2>
 
 					<div class="search-bar">
 						<input type="text" name="search" pattern=".*\S.*" x-model="search" required>

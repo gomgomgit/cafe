@@ -51,6 +51,9 @@ class HomeController extends Controller
     public function addCart(Request $request)
     {
         // dd($request->item);
+        $this->validate($request, [
+            'detailid' => 'required',
+        ]);
         $cart = Cart::add($request->detailid, $request->item, $request->qty, $request->price, ['variant' => $request->vname, 'size' => $request->sname]);
         // $cart->associate('App\Model\ItemDetail');
         Cart::associate($cart->rowId, 'App\Model\ItemDetail');
